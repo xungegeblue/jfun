@@ -2,7 +2,7 @@
 <configuration debug="false">
 
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="/jfunLog" />
+    <property name="LOG_HOME" value="/Users/mac/apps/code/jfun/log" />
 
     <!--控制台日志， 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -45,7 +45,7 @@
 
     <!-- 精确到分的日志切分方式-->
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>/jfun/app.log</File>
+        <File>/Users/mac/apps/code/jfun/app.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <FileNamePattern>logback.%d{yyyy-MM-dd}.log</FileNamePattern>

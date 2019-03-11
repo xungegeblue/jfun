@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mapper xmlns="http://mybatis.org/schema/mybatis-mapper" namespace="cn.xiejx.jfun.dao.UserDao">
+        <select id="getUser" resultType="cn.xiejx.jfun.domain.User" parameterType="string">
+            SELECT * FROM sys_user WHERE username=#{userName}
+        </select>
+</mapper>
