@@ -1,4 +1,4 @@
-package xiejx.cn.jfun;
+package cn.xiejx.jfun;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
