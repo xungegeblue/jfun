@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xiejx.jfun.dao.UserMapper">
+    <select id="selectUser" resultType="cn.xiejx.jfun.entity.User">
+        select * from sys_user where username=#{userName}
+    </select>
+
+    <select id="selectUserPermission" resultType="java.lang.String">
+        select DISTINCT p.permission from sys_user u
+        inner join sys_user_role ur on u.uid=ur.uid
+        inner join sys_role_permission rp on rp.role_id=ur.role_id
+        inner join  sys_permission p on p.id=rp.permission_id
+        where u.username=#{userName}
+    </select>
+    <select id="selectUserRole" resultType="java.lang.String">
+         select DISTINCT r.role from sys_user u
+        inner join sys_user_role ur on u.uid=ur.uid
+        inner join  sys_role r on r.id=ur.role_id
+        where u.username=#{userName}
+    </select>
+
+</mapper>

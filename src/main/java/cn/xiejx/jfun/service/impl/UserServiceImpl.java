@@ -1,23 +1,47 @@
 package cn.xiejx.jfun.service.impl;
 
-import cn.xiejx.jfun.dao.UserDao;
-import cn.xiejx.jfun.domain.User;
-import cn.xiejx.jfun.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import cn.xiejx.jfun.dao.UserMapper;
+import cn.xiejx.jfun.entity.User;
+import cn.xiejx.jfun.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserMapper userMapper;
 
-    /**
-     * 获取用户信息，登录成功以后需要调用
-     * @param userName
-     * @return
-     */
     @Override
-    public User getUser(String userName) {
+    public User findByUserName(String userName) {
+        return userMapper.selectUser(userName);
+    }
 
-        return null;
+
+    @Override
+    public Set<String> findPermissionByUser(String userName) {
+        List<String> list = userMapper.selectUserPermission(userName);
+        Set<String> set = new HashSet<>();
+        if (list != null && list.size() > 0) {
+            set.addAll(list);
+        }
+        return set;
+    }
+
+    @Override
+    public Set<String> findRoleByUser(String userName) {
+        List<String> list = userMapper.selectUserRole(userName);
+        Set<String> set = new HashSet<>();
+        if (list != null && list.size() > 0) {
+            set.addAll(list);
+        }
+        return set;
     }
 }

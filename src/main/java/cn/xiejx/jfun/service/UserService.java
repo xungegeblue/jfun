@@ -1,7 +1,15 @@
 package cn.xiejx.jfun.service;
 
-import cn.xiejx.jfun.domain.User;
+
+import cn.xiejx.jfun.entity.User;
+
+import java.util.Set;
 
 public interface UserService {
-    public User getUser(String userName);
+    /**通过username查找用户信息;*/
+     User findByUserName(String username);
+
+    Set<String> findPermissionByUser(String username);
+
+    Set<String> findRoleByUser(String username);
 }
