@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,9 @@ public class HomeController {
     public ResponseEntity login(String username, String password) {
         ResponseEntity resp = new ResponseEntity();
         try {
+            if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+                throw new AuthenticationException();
+            }
             UsernamePasswordToken u = new UsernamePasswordToken(username, password);
             Subject subject = SecurityUtils.getSubject();
             subject.login(u);

@@ -19,4 +19,15 @@ public class User implements Serializable {
     public String getCredentialsSalt(){
         return this.username+this.salt;
     }
+
+
+    public User simpleInfo(){
+        User u = new User();
+        u.setUid(this.getUid());
+        u.setName(this.getName());
+        u.setUsername(this.getUsername());
+        u.setState(this.getState());
+        u.setRoleList(this.getRoleList());
+        return u;
+    }
 }

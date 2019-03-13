@@ -2,6 +2,7 @@ package cn.xiejx.jfun.config.shiro;
 
 
 
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 
@@ -165,19 +166,19 @@ public class ShiroConfig {
         jfunSessionManager.setSessionDAO(sessionDAO());
         return jfunSessionManager;
     }
-//    @Bean
-//    public EhCacheManager getEhCacheManager() {
-//        EhCacheManager em = new EhCacheManager();
-//        em.setCacheManagerConfigFile("classpath:config/ehcache.xml");
-//        return em;
-//    }
+    @Bean
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager em = new EhCacheManager();
+        em.setCacheManagerConfigFile("classpath:config/ehcache.xml");
+        return em;
+    }
 
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
         securityManager.setSessionManager(sessionManager());
-//        securityManager.setCacheManager(getEhCacheManager());
+        securityManager.setCacheManager(ehCacheManager());
         return securityManager;
     }
 

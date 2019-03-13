@@ -38,9 +38,11 @@
     <root level="INFO">
         <appender-ref ref="FILE"/>
     </root>
-    <!--<logger name="cn.xiejx.jfun">-->
-        <!--<level value="INFO"/>-->
-    <!--</logger>-->
+
+    <!--给mybatis添加日志-->
+    <logger name="cn.xiejx.jfun.dao">
+        <level value="DEBUG"/>
+    </logger>
 
 
     <!-- 精确到分的日志切分方式-->
