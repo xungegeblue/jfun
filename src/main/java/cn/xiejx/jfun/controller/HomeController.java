@@ -11,8 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @Author 谢镜勋
@@ -23,8 +27,10 @@ public class HomeController {
     @Autowired
     private final static Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @RequestMapping("/login")
-    public ResponseEntity login(String username, String password) {
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public ResponseEntity login(@RequestBody Map<String,String> map){
+        String username = map.get("username");
+        String password = map.get("password");
         ResponseEntity resp = new ResponseEntity();
         try {
             if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
