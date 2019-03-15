@@ -8,17 +8,17 @@ import lombok.Data;
  */
 @Data
 public class ResponseEntity {
-    private int code;
+    private int status;
     private Object message;
 
     public ResponseEntity success() {
-        this.code = 200;
+        this.status = 200;
         this.message = "操作成功";
         return this;
     }
 
-    public ResponseEntity code(int code) {
-        this.code = code;
+    public ResponseEntity status(int status) {
+        this.status = status;
         return this;
     }
 
@@ -28,7 +28,7 @@ public class ResponseEntity {
     }
 
     public ResponseEntity error() {
-        this.code = 500;
+        this.status = 500;
         return this;
     }
 }

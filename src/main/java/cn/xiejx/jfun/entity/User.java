@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
 @Data
 public class User implements Serializable {
     private Integer uid;
+
+    @NotBlank
     private String username;//帐号
     private String name;//名称（昵称或者真实姓名，不同系统不同定义）
     private String password; //密码;
