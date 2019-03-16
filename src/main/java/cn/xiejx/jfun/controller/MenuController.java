@@ -6,6 +6,7 @@ import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.MenuService;
 import cn.xiejx.jfun.service.RoleService;
 import cn.xiejx.jfun.service.dto.MenuDTO;
+import cn.xiejx.jfun.util.Trans2Entity;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
+    @Autowired
+    Trans2Entity trans2Entity;
+
     /**
      * 构建前端所需要的路由
      *
@@ -39,11 +43,9 @@ public class MenuController {
     public ResponseEntity buildMenus() {
         //查询用户关联的菜单
         User user = (User) SecurityUtils.getSubject();
-//        List<MenuDTO> menuDTOList  = roleService.getRolesByUser(user);
-//        List<MenuDTO> menus = menuService.getMenuByRole(menuDTOList);
-//        List<MenuDTO> menuDTOTree = (List<MenuDTO>)menuService.buildTree(menuDTOList).get("content");
-//        return new ResponseEntity(menuService.buildMenus(menuDTOTree),HttpStatus.OK);
-        return null;
-//        return new ResponseEntity(menuService.buildMenu(tree), HttpStatus.OK);
+        List<Role> menuDTOList  = roleService.getRolesByUser(user);
+        List<MenuDTO> menus = menuService.getMenuByRole(menuDTOList);
+        List<MenuDTO> menuDTOTree = (List<MenuDTO>)trans2Entity.buildTree(menus).get("content");
+        return new ResponseEntity(trans2Entity.buildMenus(menuDTOTree),HttpStatus.OK);
     }
 }

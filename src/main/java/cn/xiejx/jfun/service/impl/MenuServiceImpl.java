@@ -4,12 +4,14 @@ import cn.xiejx.jfun.dao.MenuMapper;
 import cn.xiejx.jfun.entity.Menu;
 import cn.xiejx.jfun.entity.Role;
 import cn.xiejx.jfun.service.MenuService;
+import cn.xiejx.jfun.service.dto.MenuDTO;
+import cn.xiejx.jfun.util.Trans2Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,22 +25,17 @@ public class MenuServiceImpl implements MenuService {
     MenuMapper mapper;
 
     @Override
-    public List<Menu> getMenuByRole(List<Role> roles) {
+    public List<MenuDTO> getMenuByRole(List<Role> roles) {
         Set<Menu> menus = new LinkedHashSet<>();
         for (Role role : roles) {
             List<Menu> rs = mapper.getMenuByRole(role.getId());
             menus.addAll(rs);
         }
-        return menus.stream().collect(Collectors.toList());
+        List<MenuDTO> collect = menus.stream().map(Trans2Entity::toDto).collect(Collectors.toList());
+        return collect;
     }
 
-    @Override
-    public List<Menu> buildTree(List<Menu> menus) {
-        return null;
-    }
 
-    @Override
-    public Object buildMenu(List<Menu> tree) {
-        return null;
-    }
+
+
 }

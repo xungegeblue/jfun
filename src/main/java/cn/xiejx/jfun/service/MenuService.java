@@ -2,6 +2,7 @@ package cn.xiejx.jfun.service;
 
 import cn.xiejx.jfun.entity.Menu;
 import cn.xiejx.jfun.entity.Role;
+import cn.xiejx.jfun.service.dto.MenuDTO;
 
 import java.util.List;
 
@@ -10,9 +11,7 @@ import java.util.List;
  * @Date 2019/3/15
  */
 public interface MenuService {
-    List<Menu> getMenuByRole(List<Role> roles);
+    List<MenuDTO> getMenuByRole(List<Role> roles);
 
-    List<Menu> buildTree(List<Menu> menus);
 
-    Object buildMenu(List<Menu> tree);
 }
