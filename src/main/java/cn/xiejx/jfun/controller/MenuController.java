@@ -22,7 +22,6 @@ import java.util.List;
  * @Date 2019/3/15
  */
 @RestController
-@RequestMapping("api")
 public class MenuController {
 
     @Autowired
@@ -42,7 +41,7 @@ public class MenuController {
     @GetMapping(value = "/menus/build")
     public ResponseEntity buildMenus() {
         //查询用户关联的菜单
-        User user = (User) SecurityUtils.getSubject();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<Role> menuDTOList  = roleService.getRolesByUser(user);
         List<MenuDTO> menus = menuService.getMenuByRole(menuDTOList);
         List<MenuDTO> menuDTOTree = (List<MenuDTO>)trans2Entity.buildTree(menus).get("content");

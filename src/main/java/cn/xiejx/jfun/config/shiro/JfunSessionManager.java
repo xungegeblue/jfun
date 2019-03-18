@@ -1,9 +1,11 @@
 package cn.xiejx.jfun.config.shiro;
 
+import cn.xiejx.jfun.config.exection.BadRequestException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;

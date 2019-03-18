@@ -1,18 +1,12 @@
 package cn.xiejx.jfun.controller;
 
+import cn.xiejx.jfun.config.exection.BadRequestException;
 import cn.xiejx.jfun.config.shiro.ShiroRealm;
 import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.dto.AuthenticationInfo;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.aop.AuthenticatedAnnotationHandler;
-import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * @Author 谢镜勋
@@ -40,14 +31,32 @@ public class HomeController {
 
     @Autowired
     ShiroRealm shiroDbRealm;
+
     @RequestMapping(value = "info")
     public User info() {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = new User();
         return user;
     }
 
+
+    @RequestMapping("test")
+    public User test() {
+        User u = new User();
+        u.setName("test");
+        return u;
+    }
+
+    @RequestMapping(value = "visits")
+    public String visits(){
+        return "{\"newVisits\":7,\"newIp\":1,\"recentVisits\":15,\"recentIp\":3}";
+    }
+
+    @RequestMapping(value = "/visits/chartData")
+    public String charData(){
+        return "{\"weekDays\":[\"Fri\",\"Sat\",\"Mon\"],\"ipData\":[1,1,1],\"visitsData\":[4,4,7]}";
+    }
     @RequestMapping(value = "/login")
-    public ResponseEntity login(@RequestBody User user) throws Exception {
+    public ResponseEntity login(@RequestBody User user) throws BadRequestException {
         try {
             if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
                 throw new AuthenticationException();
@@ -62,8 +71,14 @@ public class HomeController {
             info.setToken((String) subject.getSession().getId());
             info.setUser(a);
             return ResponseEntity.ok(info);
-        }  catch (Exception e) {
-            throw new Exception("登录失败");
+        } catch (UnknownAccountException uae) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "未知用户!");
+        } catch (IncorrectCredentialsException ice) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "密码不匹配!");
+        } catch (LockedAccountException lae) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "用户冻结!");
+        } catch (AuthenticationException ae) {
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "认证失败!");
         }
     }
 

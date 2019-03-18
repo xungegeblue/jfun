@@ -35,6 +35,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import javax.servlet.Filter;
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -81,19 +82,24 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/static/**", "anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
-        //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
-        //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        filterChainDefinitionMap.put("/**", "authc");
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        // 登录成功后要跳转的链接
-//        shiroFilterFactoryBean.setSuccessUrl("/index");
-        //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/test", "anon");
+
+        //authc:所有url必须通过认证才能访问，anon:所有url都可以匿名访问
+        filterChainDefinitionMap.put("/**", "corsAuthenticationFilter");
+
+
+        //自定义过滤器
+        Map<String, Filter> filterMap = new LinkedHashMap<>();
+        filterMap.put("corsAuthenticationFilter", corsAuthenticationFilter());
+        shiroFilterFactoryBean.setFilters(filterMap);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+
         return shiroFilterFactoryBean;
     }
-
+    public CORSAuthenticationFilter corsAuthenticationFilter(){
+        return new CORSAuthenticationFilter();
+    }
     //加密方式
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
