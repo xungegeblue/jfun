@@ -2,6 +2,7 @@ package cn.xiejx.jfun.config.shiro;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -40,8 +41,9 @@ public class CORSAuthenticationFilter extends FormAuthenticationFilter {
         res.setCharacterEncoding("UTF-8");
         PrintWriter writer = res.getWriter();
         Map<String, Object> map= new HashMap<>();
+        res.setStatus(HttpStatus.UNAUTHORIZED.value());
         map.put("status", 401);
-        map.put("message", "未登录");
+        map.put("message", "you shuld go to login");
         writer.write(JSON.toJSONString(map));
         writer.close();
         return false;

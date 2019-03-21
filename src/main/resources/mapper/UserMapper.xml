@@ -18,5 +18,10 @@
         inner join  sys_role r on r.id=ur.role_id
         where u.username=#{userName}
     </select>
-
+    <select id="selectUserPage" resultType="cn.xiejx.jfun.entity.User">
+        select * from sys_user where 1 = 1
+        <if test="user.username != null and user.username != ''">
+            and name like concat('%',#{user.username},'%')
+        </if>
+    </select>
 </mapper>

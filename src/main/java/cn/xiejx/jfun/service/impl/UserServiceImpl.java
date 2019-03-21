@@ -4,6 +4,8 @@ package cn.xiejx.jfun.service.impl;
 import cn.xiejx.jfun.dao.UserMapper;
 import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.UserService;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,5 +45,10 @@ public class UserServiceImpl implements UserService {
             set.addAll(list);
         }
         return set;
+    }
+
+    @Override
+    public IPage<User> selectUserPage(Page<User> page, User user) {
+       return userMapper.selectUserPage(page,user);
     }
 }

@@ -2,6 +2,8 @@ package cn.xiejx.jfun.service;
 
 
 import cn.xiejx.jfun.entity.User;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.Set;
 
@@ -12,4 +14,6 @@ public interface UserService {
     Set<String> findPermissionByUser(String username);
 
     Set<String> findRoleByUser(String username);
+
+    public IPage<User> selectUserPage(Page<User> page,User user);
 }

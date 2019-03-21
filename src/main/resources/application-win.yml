@@ -8,13 +8,31 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    isRedisCache: 1 #1开启session缓存
+    isRedisCache: 0 #1开启session缓存
     jedis:
       pool:
         max-active: 8
         max-idle: 8
         min-idle: 0
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  cache:
+    ehcache:
+      config: config/ehcache.xml
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  port: 8080
 
 mybatis-plus:
-    mapper-locations: classpath:mapper/*.xml
-    type-aliases-package: cn.xiejx.jfun.entity
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: cn.xiejx.jfun.entity
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql
+  reasonable: true
+  support-methods-arguments: true
