@@ -16,9 +16,9 @@ spring:
         min-idle: 0
   http:
     encoding:
-      charset: UTF-8
-      enabled: true
       force: true
+      charset: utf-8
+      enabled: true
   cache:
     ehcache:
       config: config/ehcache.xml

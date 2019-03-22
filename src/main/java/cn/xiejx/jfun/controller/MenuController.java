@@ -38,7 +38,7 @@ public class MenuController {
      *
      * @return
      */
-    @GetMapping(value = "/menus/build")
+    @GetMapping(value = "/menus/build", produces = "application/json;charset=utf-8")
     public ResponseEntity buildMenus() {
         //查询用户关联的菜单
         User user = (User) SecurityUtils.getSubject().getPrincipal();

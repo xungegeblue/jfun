@@ -32,7 +32,7 @@ public class HomeController {
     @Autowired
     ShiroRealm shiroDbRealm;
 
-    @RequestMapping(value = "info")
+    @RequestMapping(value = "info", produces = "application/json;charset=utf-8")
     public User info() {
         User user = new User();
         return user;
@@ -46,12 +46,12 @@ public class HomeController {
         return u;
     }
 
-    @RequestMapping(value = "visits")
+    @RequestMapping(value = "visits", produces = "application/json;charset=utf-8")
     public String visits(){
         return "{\"newVisits\":7,\"newIp\":1,\"recentVisits\":15,\"recentIp\":3}";
     }
 
-    @RequestMapping(value = "/visits/chartData")
+    @RequestMapping(value = "/visits/chartData", produces = "application/json;charset=utf-8")
     public String charData(){
         return "{\"weekDays\":[\"Fri\",\"Sat\",\"Mon\"],\"ipData\":[1,1,1],\"visitsData\":[4,4,7]}";
     }
