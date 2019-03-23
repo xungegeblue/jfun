@@ -25,7 +25,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String userName  = (String) authenticationToken.getPrincipal();
         User user = userService.findByUserName(userName);
         if (user == null) return null;
-        if(user.getState() == 1){
+        if(user.getState() == 0){
             throw new LockedAccountException();//账户冻结
         }
         return new SimpleAuthenticationInfo(
@@ -39,6 +39,7 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         User user = (User) principalCollection.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        //使用基于角色的权限控制(前后端都做了权限控制，后端代码禁止使用role进行权限控制。把role当成权限的容器，没有实质的作用！！！
         Set<String> roles = userService.findRoleByUser(user.getUsername());
         Set<String> permissions = userService.findPermissionByUser(user.getUsername());
         authorizationInfo.setRoles(roles);

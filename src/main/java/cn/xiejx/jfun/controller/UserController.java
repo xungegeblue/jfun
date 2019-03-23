@@ -2,6 +2,7 @@ package cn.xiejx.jfun.controller;
 
 import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.UserService;
+import cn.xiejx.jfun.service.dto.UserDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,19 @@ public class UserController {
     @Autowired
     UserService service;
 
+//    @RequestMapping(value = "list", method = RequestMethod.GET)
+//    public ResponseEntity user(@RequestParam(defaultValue = "") String username, @RequestParam(defaultValue = "1", value = "page") long page) {
+//        Page pageData = new Page();
+//        pageData.setPages(page);
+//        pageData.setCurrent(page);
+//        User u = new User();
+//        u.setUsername(username);
+//        IPage<User> iPage = service.selectUserPage(pageData,u);
+//        return ResponseEntity.ok(iPage);
+//    }
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseEntity user(@RequestParam String username, @RequestParam(defaultValue = "1", value = "page") long page) {
-        Page pageData = new Page();
-        pageData.setPages(page);
-        pageData.setCurrent(page);
-        User u = new User();
-        u.setUsername(username);
-        IPage<User> iPage = service.selectUserPage(pageData,u);
+    public ResponseEntity user(Page page,User u){
+        IPage<User> iPage = service.selectUserPage(page,u);
         return ResponseEntity.ok(iPage);
     }
 }

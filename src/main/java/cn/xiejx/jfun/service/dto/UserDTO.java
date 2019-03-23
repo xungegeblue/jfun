@@ -1,5 +1,6 @@
 package cn.xiejx.jfun.service.dto;
 
+import cn.xiejx.jfun.entity.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -33,6 +34,7 @@ public class UserDTO implements Serializable {
 
     private Date lastPasswordResetTime;
 
+    private Set<String> roles;
 
-    private Set<RoleDTO> roles;
+    private Set<String> permissions;
 }
