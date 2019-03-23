@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -32,10 +33,10 @@ public class HomeController {
     @Autowired
     ShiroRealm shiroDbRealm;
 
-    @RequestMapping(value = "info", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/info", produces = "application/json;charset=utf-8",method = RequestMethod.GET)
     public User info() {
-        User user = new User();
-        return user;
+        User u = (User) SecurityUtils.getSubject().getPrincipal();
+        return u;
     }
 
 
