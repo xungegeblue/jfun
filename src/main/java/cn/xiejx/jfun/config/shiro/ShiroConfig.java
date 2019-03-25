@@ -165,6 +165,7 @@ public class ShiroConfig {
         if (1 == isRedisCache) {
             RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
             redisSessionDAO.setRedisManager(redisManager());
+            redisSessionDAO.setExpire(24*60*60);
             logger.info("---> 开启Redis缓存Session");
         } else {
             MemorySessionDAO sessionDAO = new MemorySessionDAO();

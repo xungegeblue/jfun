@@ -6,6 +6,7 @@ import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.UserService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService {
     @Autowired
     private UserMapper userMapper;
 
@@ -26,6 +27,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUser(userName);
     }
 
+    public void insertUser(User user){
+       if(userMapper.insert(user)>0){
+           //
+       }
+    }
 
     @Override
     public Set<String> findPermissionByUser(String userName) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 @RequestMapping("user")
 public class UserController {
     @Autowired
-    UserService service;
+    UserService userService;
 
 //    @RequestMapping(value = "list", method = RequestMethod.GET)
 //    public ResponseEntity user(@RequestParam(defaultValue = "") String username, @RequestParam(defaultValue = "1", value = "page") long page) {
@@ -33,7 +34,11 @@ public class UserController {
 //    }
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseEntity user(Page page,User u){
-        IPage<User> iPage = service.selectUserPage(page,u);
+        IPage<User> iPage = userService.selectUserPage(page,u);
         return ResponseEntity.ok(iPage);
+    }
+    @RequestMapping(value = "add",method = RequestMethod.POST)
+    public ResponseEntity user(User user){
+        return null;
     }
 }

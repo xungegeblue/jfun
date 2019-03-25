@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@TableName(value = "sys_user")
 public class User implements Serializable {
     private Integer uid;
 
