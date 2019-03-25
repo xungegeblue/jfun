@@ -13,7 +13,7 @@
         where u.username=#{userName}
     </select>
     <select id="selectUserRole" resultType="java.lang.String">
-         select DISTINCT r.role from sys_user u
+         select DISTINCT r.name from sys_user u
         inner join sys_user_role ur on u.uid=ur.uid
         inner join  sys_role r on r.id=ur.role_id
         where u.username=#{userName}

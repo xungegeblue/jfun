@@ -4,4 +4,7 @@
     <select id="selectRolesByUser" resultType="cn.xiejx.jfun.entity.Role">
         SELECT * FROM sys_role WHERE sys_role.id IN ( SELECT role_id FROM sys_user_role ur WHERE ur.uid =#{userId})
     </select>
+    <select id="getRoleTree" resultType="cn.xiejx.jfun.entity.Role">
+        select * from sys_role
+    </select>
 </mapper>

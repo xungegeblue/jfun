@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface RoleService {
     public List<Role> getRolesByUser(User user);
+
+    Object getRoleTree();
 }

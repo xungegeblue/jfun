@@ -37,6 +37,12 @@ spring:
       web-stat-filter:
         url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+  #热部署生效
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
   redis:
     host: 127.0.0.1
     port: 6379
