@@ -3,6 +3,7 @@ package cn.xiejx.jfun.config.shiro;
 
 import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.UserService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -37,7 +38,18 @@ public class ShiroRealm extends AuthorizingRealm {
     //获取授权信息
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        User user = (User) principalCollection.getPrimaryPrincipal();
+
+
+        Object key = principalCollection.getPrimaryPrincipal();
+        User user=new User();
+        try {
+            BeanUtils.copyProperties(user, key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //User user = (User) principalCollection.getPrimaryPrincipal();这段代码启用了热部署以后使用不了!!
+
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //使用基于角色的权限控制(前后端都做了权限控制，后端代码禁止使用role进行权限控制。把role当成权限的容器，没有实质的作用！！！
         Set<String> roles = userService.findRoleByUser(user.getUsername());
