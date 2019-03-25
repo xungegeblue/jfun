@@ -7,6 +7,7 @@ import cn.xiejx.jfun.service.UserService;
 import cn.xiejx.jfun.service.dto.AuthenticationInfo;
 
 import cn.xiejx.jfun.service.dto.UserDTO;
+import cn.xiejx.jfun.util.ShiroSecurityUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -42,7 +43,7 @@ public class HomeController {
 
     @RequestMapping(value = "/info", produces = "application/json;charset=utf-8",method = RequestMethod.GET)
     public UserDTO info() {
-        User u = (User) SecurityUtils.getSubject().getPrincipal();
+        User u = (User) ShiroSecurityUtils.getPrincipal();
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(u,userDTO);
         Set<String> permissions = userService.findPermissionByUser(u.getUsername());
@@ -72,12 +73,12 @@ public class HomeController {
         try {
             if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
                 throw new AuthenticationException();
-            }
+   /**/         }
             UsernamePasswordToken u = new UsernamePasswordToken(user.getUsername(), user.getPassword());
             Subject subject = SecurityUtils.getSubject();
             subject.login(u);
 
-            User a = (User) subject.getPrincipal();
+            User a = (User) ShiroSecurityUtils.getPrincipal();
 
             UserDTO userDTO = new UserDTO();
 

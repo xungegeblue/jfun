@@ -6,6 +6,7 @@ import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.MenuService;
 import cn.xiejx.jfun.service.RoleService;
 import cn.xiejx.jfun.service.dto.MenuDTO;
+import cn.xiejx.jfun.util.ShiroSecurityUtils;
 import cn.xiejx.jfun.util.Trans2Entity;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class MenuController {
     @GetMapping(value = "/menus/build", produces = "application/json;charset=utf-8")
     public ResponseEntity buildMenus() {
         //查询用户关联的菜单
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = (User) ShiroSecurityUtils.getPrincipal();
         List<Role> menuDTOList  = roleService.getRolesByUser(user);
         List<MenuDTO> menus = menuService.getMenuByRole(menuDTOList);
         List<MenuDTO> menuDTOTree = (List<MenuDTO>)trans2Entity.buildTree(menus).get("content");

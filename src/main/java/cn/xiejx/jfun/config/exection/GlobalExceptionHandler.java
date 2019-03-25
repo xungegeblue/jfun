@@ -25,6 +25,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(Exception e){
+        e.printStackTrace();
         // 打印堆栈信息
         ApiError apiError = new ApiError(BAD_REQUEST.value(),e.getMessage());
         return buildResponseEntity(apiError);
@@ -39,7 +40,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = BadRequestException.class)
 	public ResponseEntity<ApiError> badRequestException(BadRequestException e) {
         // 打印堆栈信息
-
+        e.printStackTrace();
         ApiError apiError = new ApiError(e.getStatus(),e.getMessage());
         return buildResponseEntity(apiError);
 	}
@@ -53,7 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         // 打印堆栈信息
-
+        e.printStackTrace();
         String[] str = e.getBindingResult().getAllErrors().get(0).getCodes()[1].split("\\.");
         StringBuffer msg = new StringBuffer(str[1]+":");
         msg.append(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
