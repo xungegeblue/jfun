@@ -46,7 +46,7 @@ public class HomeController {
         User u = (User) ShiroSecurityUtils.getPrincipal();
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(u,userDTO);
-        Set<String> permissions = userService.findPermissionByUser(u.getUsername());
+        Set<String> permissions = userService.findPermissionByUser(u.getName());
         userDTO.setPermissions(permissions);
         return userDTO;
     }
@@ -71,10 +71,10 @@ public class HomeController {
     @RequestMapping(value = "/login")
     public ResponseEntity login(@RequestBody User user) throws BadRequestException {
         try {
-            if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            if (StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getPassword())) {
                 throw new AuthenticationException();
    /**/         }
-            UsernamePasswordToken u = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+            UsernamePasswordToken u = new UsernamePasswordToken(user.getName(), user.getPassword());
             Subject subject = SecurityUtils.getSubject();
             subject.login(u);
 
@@ -85,9 +85,8 @@ public class HomeController {
 
             BeanUtils.copyProperties(a,userDTO);
 
-            Set<String> permissions = userService.findPermissionByUser(user.getUsername());
+            Set<String> permissions = userService.findPermissionByUser(user.getName());
             userDTO.setPermissions(permissions);
-            a.setRoles(Arrays.asList("ADMIN"));
 
             AuthenticationInfo info = new AuthenticationInfo();
             info.setToken((String) subject.getSession().getId());

@@ -8,7 +8,6 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +22,13 @@ public class ShiroRealm extends AuthorizingRealm {
     //获取认证信息
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        String userName  = (String) authenticationToken.getPrincipal();
-        User user = userService.findByUserName(userName);
+        String name  = (String) authenticationToken.getPrincipal();
+        User user = userService.findByName(name);
         if (user == null) return null;
         if(user.getState() == 0){
             throw new LockedAccountException();//账户冻结
         }
+
         return new SimpleAuthenticationInfo(
                 user, user.getPassword(), ByteSource.Util.bytes(user.getCredentialsSalt()),
                 getName()
@@ -52,8 +52,8 @@ public class ShiroRealm extends AuthorizingRealm {
 
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //使用基于角色的权限控制(前后端都做了权限控制，后端代码禁止使用role进行权限控制。把role当成权限的容器，没有实质的作用！！！
-        Set<String> roles = userService.findRoleByUser(user.getUsername());
-        Set<String> permissions = userService.findPermissionByUser(user.getUsername());
+        Set<String> roles = userService.findRoleByUser(user.getName());
+        Set<String> permissions = userService.findPermissionByUser(user.getName());
         authorizationInfo.setRoles(roles);
         authorizationInfo.setStringPermissions(permissions);
         return authorizationInfo;

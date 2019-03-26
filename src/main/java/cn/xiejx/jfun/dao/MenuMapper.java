@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
-    public List<Menu> getMenuByRole(@Param("roleId") Integer roleId);
+    public List<Menu> getMenuByRole(@Param("roleId") Long roleId);
 }
