@@ -20,4 +20,6 @@ public interface UserService extends IService<User> {
     public IPage<User> selectUserPage(Page<User> page,User user);
 
     User create(User user);
+
+    void update(User user);
 }

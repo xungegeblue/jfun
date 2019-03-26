@@ -85,4 +85,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return user;
     }
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void update(User user) {
+        User dbUser = baseMapper.selectById(user.getUid());
+        if(dbUser==null){
+            throw new EntityExistException(User.class,"user",null);
+        }
+        //用户名和邮箱不可以重复
+        User user1 = baseMapper.selectUser(user.getName());
+        User user2 = baseMapper.selectEmail(user.getEmail());
+
+        if(user1!=null && user1.getUid() != user.getUid()){
+            throw new EntityExistException(User.class,"name",user.getName());
+        }
+        if(user2!=null && user2.getUid()!=user.getUid()){
+            throw new EntityExistException(User.class,"email",user.getEmail());
+        }
+        dbUser.setName(user.getName());
+        dbUser.setEmail(user.getEmail());
+        int i = baseMapper.update(dbUser,null);
+        if(i>0){
+            List<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toList());
+            baseMapper.delUserRoleByUid(user.getUid());
+            roleIds.forEach((rid) ->{
+                baseMapper.addRoleByUid(user.getUid(),rid);
+            });
+        }
+    }
 }

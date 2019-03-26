@@ -33,4 +33,9 @@ public class UserController {
         User u = userService.create(user);
         return new ResponseEntity(u, HttpStatus.CREATED);
     }
+    @RequestMapping(value = "edit",method = RequestMethod.POST)
+    public ResponseEntity edit(@Validated @RequestBody User user){
+        userService.update(user);
+        return ResponseEntity.ok(null);
+    }
 }
