@@ -22,4 +22,6 @@ public interface UserService extends IService<User> {
     User create(User user);
 
     void update(User user);
+
+    void delete(Long id);
 }

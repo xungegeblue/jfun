@@ -17,7 +17,7 @@ import java.util.List;
 public class User implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long uid;
+    private Long id;
 
     @NotBlank
 
@@ -40,7 +40,7 @@ public class User implements Serializable {
 
     public User simpleInfo() {
         User u = new User();
-        u.setUid(this.getUid());
+        u.setId(this.getId());
         u.setName(this.getName());
         u.setState(this.getState());
         u.setRoles(this.getRoles());

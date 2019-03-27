@@ -5,18 +5,18 @@
 
     <select id="selectUserPermission" resultType="java.lang.String">
         select DISTINCT p.permission from sys_user u
-        inner join sys_user_role ur on u.uid=ur.uid
+        inner join sys_user_role ur on u.id=ur.uid
         inner join sys_role_permission rp on rp.role_id=ur.role_id
         inner join  sys_permission p on p.id=rp.permission_id
         where u.name=#{name}
     </select>
     <select id="selectUserRole" resultType="java.lang.String">
          select DISTINCT r.name from sys_user u
-        inner join sys_user_role ur on u.uid=ur.uid
+        inner join sys_user_role ur on u.id=ur.uid
         inner join  sys_role r on r.id=ur.role_id
         where u.name=#{name}
     </select>
-    <select id="selectUserPage" resultType="cn.xiejx.jfun.entity.User">
+    <select id="selectUserPage" resultMap="user">
         select * from sys_user where 1 = 1
         <if test="user.name != null and user.name != ''">
             and name like concat('%',#{user.name},'%')
@@ -26,4 +26,10 @@
             and state = #{user.state}
         </if>
     </select>
+    <!--参考文章http://199604.com/709 -->
+    <resultMap id="user" type="cn.xiejx.jfun.entity.User">
+        <id property="id" column="id"/>
+        <collection property="roles" column="id" select="cn.xiejx.jfun.dao.RoleMapper.selectRolesByUser"  javaType="ArrayList" fetchType="eager">
+        </collection>
+    </resultMap>
 </mapper>

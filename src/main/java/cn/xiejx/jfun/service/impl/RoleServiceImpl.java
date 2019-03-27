@@ -22,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     RoleMapper mapper;
 
     public List<Role> getRolesByUser(User user){
-        return mapper.selectRolesByUser(user.getUid());
+        return mapper.selectRolesByUser(user.getId());
     }
 
     @Override

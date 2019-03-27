@@ -17,4 +17,6 @@ public interface RoleMapper extends BaseMapper<Role> {
     public List<Role>  selectRolesByUser(@Param("userId") Long userId);
 
     List<Role> getRoleTree();
+
+
 }

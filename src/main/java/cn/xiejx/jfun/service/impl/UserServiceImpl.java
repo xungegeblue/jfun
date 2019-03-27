@@ -2,6 +2,7 @@ package cn.xiejx.jfun.service.impl;
 
 
 import cn.hutool.core.date.DateUtil;
+import cn.xiejx.jfun.config.exection.BadRequestException;
 import cn.xiejx.jfun.config.exection.EntityExistException;
 import cn.xiejx.jfun.dao.UserMapper;
 import cn.xiejx.jfun.entity.Role;
@@ -77,9 +78,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(enPass);
         if (userMapper.insert(user) > 0) { //插入以后没有uid导致报错
             List<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-            baseMapper.delUserRoleByUid(user.getUid());
+            baseMapper.delUserRoleByUid(user.getId());
             roleIds.forEach((rid) ->{
-                baseMapper.addRoleByUid(user.getUid(),rid);
+                baseMapper.addRoleByUid(user.getId(),rid);
             });
 
         }
@@ -88,29 +89,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(User user) {
-        User dbUser = baseMapper.selectById(user.getUid());
+        User dbUser = baseMapper.selectById(user.getId());
         if(dbUser==null){
             throw new EntityExistException(User.class,"user",null);
         }
         //用户名和邮箱不可以重复
+        if(user.getId().equals(1L)){
+            throw new BadRequestException("该账号不能被修改");
+        }
+        if(user.getRoles() == null || user.getRoles().size() == 0){
+            throw new BadRequestException("角色不能为空");
+        }
+
         User user1 = baseMapper.selectUser(user.getName());
         User user2 = baseMapper.selectEmail(user.getEmail());
 
-        if(user1!=null && user1.getUid() != user.getUid()){
+        if(user1!=null && user1.getId() != user.getId()){
             throw new EntityExistException(User.class,"name",user.getName());
         }
-        if(user2!=null && user2.getUid()!=user.getUid()){
+        if(user2!=null && user2.getId()!=user.getId()){
             throw new EntityExistException(User.class,"email",user.getEmail());
         }
         dbUser.setName(user.getName());
         dbUser.setEmail(user.getEmail());
-        int i = baseMapper.update(dbUser,null);
+        int i = baseMapper.updateById(dbUser);//不要使用update
         if(i>0){
             List<Long> roleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toList());
-            baseMapper.delUserRoleByUid(user.getUid());
+            baseMapper.delUserRoleByUid(user.getId());
             roleIds.forEach((rid) ->{
-                baseMapper.addRoleByUid(user.getUid(),rid);
+                baseMapper.addRoleByUid(user.getId(),rid);
             });
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        int i = baseMapper.deleteById(id);
+        if(i>0){
+            baseMapper.delUserRoleByUid(id);
         }
     }
 }
