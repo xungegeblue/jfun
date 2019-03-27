@@ -4,6 +4,7 @@ import cn.xiejx.jfun.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ import java.util.List;
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
     public List<Menu> getMenuByRole(@Param("roleId") Long roleId);
+
+  
 }

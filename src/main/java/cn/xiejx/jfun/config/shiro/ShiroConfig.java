@@ -54,6 +54,7 @@ public class ShiroConfig {
     @Value("${spring.redis.isRedisCache}")
     private int isRedisCache = 1;
 
+    private static final String CACHE_KEY = "jfun:session:";
 
     private final static Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
 
@@ -101,7 +102,6 @@ public class ShiroConfig {
         return new CORSAuthenticationFilter();
     }
     //加密方式
-    @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
@@ -129,48 +129,47 @@ public class ShiroConfig {
 
 
     @Bean
-    public RedisManager redisManager() {
+    public RedisManager redisManager(JedisPool jedisPool) {
         RedisManager redisManager = new RedisManager();
-        redisManager.setJedisPool(jedisPool());
+        redisManager.setJedisPool(jedisPool);
         logger.info("配置redis连接设置##########" + host + ":::" + port);
         return redisManager;
     }
 
     @Bean
-    public RedisCacheManager cacheManager(){
+    public RedisCacheManager cacheManager(RedisManager redisManager){
         RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
+        redisCacheManager.setRedisManager(redisManager);
         return redisCacheManager;
     }
 
     @Bean
-    SessionDAO sessionDAO() {
-        logger.info("是否使用redis缓存");
+    SessionDAO sessionDAO(RedisManager redisManager) {
+
         if (1 == isRedisCache) {
+            logger.info("启用Redis缓存");
             RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-            redisSessionDAO.setRedisManager(redisManager());
-            logger.info("设置redisSessionDAO");
+            redisSessionDAO.setKeyPrefix(CACHE_KEY);
+            redisSessionDAO.setRedisManager(redisManager);
+            redisSessionDAO.setExpire(60*60*60);//超出这个时间不活动代表过期
             return redisSessionDAO;
         } else {
             MemorySessionDAO sessionDAO = new MemorySessionDAO();
-            logger.info("设置MemorySessionDAO");
             return sessionDAO;
         }
     }
 
     //自定义session管理
     @Bean
-    public JfunSessionManager sessionManager(){
+    public JfunSessionManager sessionManager(SessionDAO sessionDAO){
         JfunSessionManager jfunSessionManager = new JfunSessionManager();
+
         if (1 == isRedisCache) {
-            RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-            redisSessionDAO.setRedisManager(redisManager());
-            redisSessionDAO.setExpire(24*60*60);
-            logger.info("---> 开启Redis缓存Session");
+            jfunSessionManager.setSessionDAO(sessionDAO);
         } else {
-            MemorySessionDAO sessionDAO = new MemorySessionDAO();
+            jfunSessionManager.setSessionDAO(new MemorySessionDAO());
         }
-        jfunSessionManager.setSessionDAO(sessionDAO());
+
         return jfunSessionManager;
     }
     @Bean
@@ -181,11 +180,11 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(ShiroRealm shiroRealm,SessionDAO sessionDAO,EhCacheManager ehCacheManager,JfunSessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(shiroRealm());
-        securityManager.setSessionManager(sessionManager());
-        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setRealm(shiroRealm);
+        securityManager.setSessionManager(sessionManager);
+        securityManager.setCacheManager(ehCacheManager);
         return securityManager;
     }
 
@@ -194,9 +193,9 @@ public class ShiroConfig {
      * 使用代理方式;所以需要开启代码支持;
      */
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
 

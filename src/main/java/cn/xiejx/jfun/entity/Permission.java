@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class Permission implements Serializable {
-    private Integer id;//主键.
+    private Long id;//主键.
     private String name;//名称.
     private String resourceType;//资源类型，[menu|button]
     private String url;//资源路径.

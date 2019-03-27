@@ -7,4 +7,16 @@
     <select id="getRoleTree" resultType="cn.xiejx.jfun.entity.Role">
         select * from sys_role
     </select>
+
+    <select id="selectRolesPage" resultMap="role">
+        select * from  sys_role where 1=1
+        <if test="role.name!=null">
+            and sys_role.name  like concat('%',#{role.name},'%')
+        </if>
+    </select>
+    <resultMap id="role" type="cn.xiejx.jfun.entity.Role">
+        <id property="id" column="id"/>
+        <association property="permissions" column="id" select="cn.xiejx.jfun.dao.PermissionMapper.findByRoleId" />
+        <association property="menus" column="id" select="cn.xiejx.jfun.dao.MenuMapper.getMenuByRole" />
+    </resultMap>
 </mapper>
