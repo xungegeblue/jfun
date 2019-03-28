@@ -22,4 +22,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 
     @Select("SELECT * FROM sys_permission WHERE pid=#{pid}")
     List<Permission> findByPid(@Param("pid") long pid);
+
+
 }

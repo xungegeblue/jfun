@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xiejx.jfun.dao.MenuMapper">
     <select id="getMenuByRole" resultType="cn.xiejx.jfun.entity.Menu">
-        SELECT * FROM sys_menu WHERE sys_menu.id IN ( SELECT id FROM sys_roles_menus rm WHERE rm.role_id =#{roleId})
+        SELECT * FROM sys_menu WHERE sys_menu.id IN ( SELECT menu_id as id FROM sys_roles_menus rm WHERE rm.role_id =#{roleId})
     </select>
 
 

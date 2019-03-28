@@ -22,4 +22,15 @@ public interface RoleService {
     IPage<Role> selectRolePage(Page page, Role role);
 
     Role create(Role role);
+
+    void updatePermission(Role resources);
+
+    void updateMenu(Role resource);
+
+
+    Role findRoleById(Long id);
+
+    void update(Role role);
+
+    int deleteById(Long id);
 }

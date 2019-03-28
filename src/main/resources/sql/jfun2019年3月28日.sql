@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-03-28 11:38:16
+Date: 2019-03-28 17:42:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -103,17 +103,17 @@ INSERT INTO `sys_permission` VALUES ('5', '角色管理', '0', 'role:list', '201
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `available` bit(1) DEFAULT NULL,
   `remark` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '\0', '管理员', 'admin');
-INSERT INTO `sys_role` VALUES ('2', '\0', 'VIP会员', 'vip');
+INSERT INTO `sys_role` VALUES ('1', '管理员', 'admin', '2019-03-28 15:27:48');
+INSERT INTO `sys_role` VALUES ('2', 'VIP会员', 'vip', '2019-03-28 15:27:50');
 
 -- ----------------------------
 -- Table structure for sys_roles_menus
@@ -123,9 +123,7 @@ CREATE TABLE `sys_roles_menus` (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`menu_id`,`role_id`) USING BTREE,
-  KEY `FKcngg2qadojhi3a651a5adkvbq` (`role_id`) USING BTREE,
-  CONSTRAINT `sys_roles_menus_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-  CONSTRAINT `sys_roles_menus_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`)
+  KEY `FKcngg2qadojhi3a651a5adkvbq` (`role_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -160,19 +158,17 @@ INSERT INTO `sys_roles_menus` VALUES ('1', '30');
 INSERT INTO `sys_roles_menus` VALUES ('1', '32');
 INSERT INTO `sys_roles_menus` VALUES ('2', '1');
 INSERT INTO `sys_roles_menus` VALUES ('2', '2');
+INSERT INTO `sys_roles_menus` VALUES ('2', '3');
+INSERT INTO `sys_roles_menus` VALUES ('2', '4');
+INSERT INTO `sys_roles_menus` VALUES ('2', '5');
 INSERT INTO `sys_roles_menus` VALUES ('2', '6');
-INSERT INTO `sys_roles_menus` VALUES ('2', '10');
-INSERT INTO `sys_roles_menus` VALUES ('2', '11');
+INSERT INTO `sys_roles_menus` VALUES ('2', '7');
+INSERT INTO `sys_roles_menus` VALUES ('2', '8');
+INSERT INTO `sys_roles_menus` VALUES ('2', '9');
 INSERT INTO `sys_roles_menus` VALUES ('2', '12');
-INSERT INTO `sys_roles_menus` VALUES ('2', '13');
-INSERT INTO `sys_roles_menus` VALUES ('2', '15');
-INSERT INTO `sys_roles_menus` VALUES ('2', '16');
-INSERT INTO `sys_roles_menus` VALUES ('2', '17');
-INSERT INTO `sys_roles_menus` VALUES ('2', '21');
-INSERT INTO `sys_roles_menus` VALUES ('2', '22');
-INSERT INTO `sys_roles_menus` VALUES ('2', '23');
-INSERT INTO `sys_roles_menus` VALUES ('2', '24');
-INSERT INTO `sys_roles_menus` VALUES ('2', '27');
+INSERT INTO `sys_roles_menus` VALUES ('2', '28');
+INSERT INTO `sys_roles_menus` VALUES ('2', '30');
+INSERT INTO `sys_roles_menus` VALUES ('2', '32');
 
 -- ----------------------------
 -- Table structure for sys_role_permission
@@ -180,9 +176,7 @@ INSERT INTO `sys_roles_menus` VALUES ('2', '27');
 DROP TABLE IF EXISTS `sys_role_permission`;
 CREATE TABLE `sys_role_permission` (
   `permission_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  KEY `FK9q28ewrhntqeipl1t04kh1be7` (`role_id`),
-  KEY `FKomxrs8a388bknvhjokh440waq` (`permission_id`)
+  `role_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -193,6 +187,10 @@ INSERT INTO `sys_role_permission` VALUES ('3', '1');
 INSERT INTO `sys_role_permission` VALUES ('1', '1');
 INSERT INTO `sys_role_permission` VALUES ('4', '1');
 INSERT INTO `sys_role_permission` VALUES ('5', '1');
+INSERT INTO `sys_role_permission` VALUES ('4', '2');
+INSERT INTO `sys_role_permission` VALUES ('1', '2');
+INSERT INTO `sys_role_permission` VALUES ('3', '2');
+INSERT INTO `sys_role_permission` VALUES ('2', '2');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -208,14 +206,14 @@ CREATE TABLE `sys_user` (
   `avatar` varchar(255) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '44c071210f82b42b1dda7bf3dcad348d', '2bbf27adcf3c259df147643d6fe70a23', '1', '787824374@qq.com', 'https://s2.ax1x.com/2019/03/23/AGO1q1.jpg', '2019-03-27 10:15:54');
+INSERT INTO `sys_user` VALUES ('43', 'admin', '44c071210f82b42b1dda7bf3dcad348d', '2bbf27adcf3c259df147643d6fe70a23', '1', '787824374@qq.com', 'https://s2.ax1x.com/2019/03/23/AGO1q1.jpg', '2019-03-27 10:15:54');
 INSERT INTO `sys_user` VALUES ('39', 'qqq', 'ba256b383020d3ccaa3c92e76499c45b', '79d485fa7dfab115fcf9f9eb56a9fc07', '1', 'nihao@qq.com', 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1956623052,720822838&fm=26&gp=0.jpg', '2019-03-27 10:15:54');
-INSERT INTO `sys_user` VALUES ('42', 'miv', '44c071210f82b42b1dda7bf3dcad348d', '2bbf27adcf3c259df147643d6fe70a23', '1', 'miv@qq.com', 'https://i.loli.net/2018/12/06/5c08894d8de21.jpg', '2019-03-27 11:44:03');
+INSERT INTO `sys_user` VALUES ('1', 'miv', '44c071210f82b42b1dda7bf3dcad348d', '2bbf27adcf3c259df147643d6fe70a23', '1', 'miv@qq.com', 'https://i.loli.net/2018/12/06/5c08894d8de21.jpg', '2019-03-27 11:44:03');
 
 -- ----------------------------
 -- Table structure for sys_user_role
