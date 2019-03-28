@@ -15,6 +15,8 @@ import java.util.List;
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
     public List<Menu> getMenuByRole(@Param("roleId") Long roleId);
+    
+    @Select("select * from sys_menu where pid = #{pid}")
+    List<Menu> findByPid(long pid);
 
-  
 }

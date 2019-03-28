@@ -4,7 +4,7 @@
 
 
     <select id="selectUserPermission" resultType="java.lang.String">
-        select DISTINCT p.permission from sys_user u
+        select DISTINCT p.name from sys_user u
         inner join sys_user_role ur on u.id=ur.uid
         inner join sys_role_permission rp on rp.role_id=ur.role_id
         inner join  sys_permission p on p.id=rp.permission_id

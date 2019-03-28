@@ -1,5 +1,6 @@
 package cn.xiejx.jfun.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  * @Date 2019/3/15
  */
 @Data
+@TableName(value = "sys_menu")
 public class Menu {
     private Long id;
     private String name;

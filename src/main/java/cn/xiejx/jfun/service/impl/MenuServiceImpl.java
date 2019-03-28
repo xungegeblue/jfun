@@ -6,13 +6,13 @@ import cn.xiejx.jfun.entity.Role;
 import cn.xiejx.jfun.service.MenuService;
 import cn.xiejx.jfun.service.dto.MenuDTO;
 import cn.xiejx.jfun.util.Trans2Entity;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @Date 2019/3/15
  */
 @Service
-public class MenuServiceImpl implements MenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper,Menu>  implements MenuService {
     @Autowired
     MenuMapper mapper;
 
@@ -35,7 +35,30 @@ public class MenuServiceImpl implements MenuService {
         return collect;
     }
 
+    @Override
+    public List<Menu> findByPid(long pid) {
 
+        return baseMapper.findByPid(pid);
+    }
+
+    @Override
+    public Object getMenuTree(List<Menu> menus) {
+        List<Map<String,Object>> list = new LinkedList<>();
+        menus.forEach(menu -> {
+                    if (menu!=null){
+                        List<Menu> menuList = baseMapper.findByPid(menu.getId());
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("id",menu.getId());
+                        map.put("label",menu.getName());
+                        if(menuList!=null && menuList.size()!=0){
+                            map.put("children",getMenuTree(menuList));
+                        }
+                        list.add(map);
+                    }
+                }
+        );
+        return list;
+    }
 
 
 }

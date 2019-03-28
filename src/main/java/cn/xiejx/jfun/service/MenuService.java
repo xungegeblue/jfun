@@ -14,4 +14,7 @@ public interface MenuService {
     List<MenuDTO> getMenuByRole(List<Role> roles);
 
 
+    List<Menu> findByPid(long pid);
+
+    Object getMenuTree(List<Menu> byPid);
 }
