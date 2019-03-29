@@ -17,4 +17,15 @@ public interface MenuService {
     List<Menu> findByPid(long pid);
 
     Object getMenuTree(List<Menu> byPid);
+
+    List<MenuDTO> queryAll(String name);
+
+
+    Object buildTree(List<MenuDTO> menu);
+
+    void delete(Long id);
+
+    void edit(Menu menu);
+
+    Menu create(Menu menu);
 }

@@ -19,4 +19,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
     @Select("select * from sys_menu where pid = #{pid}")
     List<Menu> findByPid(long pid);
 
+    @Select("SELECT * FROM sys_menu WHERE name = #{name}")
+    Menu findByName(String name);
 }

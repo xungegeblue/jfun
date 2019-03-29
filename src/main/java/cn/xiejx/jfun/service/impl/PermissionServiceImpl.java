@@ -53,7 +53,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return list;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     @Override
     public List<PermissionDTO> getPermissionData(List<Permission> permissions) {
         List<PermissionDTO> list = new LinkedList<>();
@@ -84,7 +84,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         //这个返回值用的很好!
         return baseMapper.insert(resource) > 0 ? resource : null;
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(Permission resource) {
         Permission permission1 = baseMapper.selectByName(resource.getName());
@@ -101,12 +101,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         dbPermission.setPid(resource.getPid());
         baseMapper.updateById(dbPermission);
     }
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void delete(Long id) {
         baseMapper.deleteById(id);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public List<Permission> queryAll(String name) {
         List<Permission> permissions = baseMapper.selectList(Wrappers.<Permission>lambdaQuery()

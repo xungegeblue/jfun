@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-03-29 10:26:27
+Date: 2019-03-29 17:41:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `hibernate_sequence` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `create_time` datetime DEFAULT NULL COMMENT '创建日期',
   `i_frame` bit(1) DEFAULT NULL COMMENT '是否外链',
   `name` varchar(255) DEFAULT NULL COMMENT '菜单名称',
@@ -80,13 +80,13 @@ INSERT INTO `sys_menu` VALUES ('32', '2019-01-13 13:49:03', '\0', '异常日志'
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_permission`;
 CREATE TABLE `sys_permission` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `alias` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `pid` int(11) DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -101,6 +101,16 @@ INSERT INTO `sys_permission` VALUES ('7', '角色编辑', '5', 'ROLE_EDIT', '201
 INSERT INTO `sys_permission` VALUES ('8', '角色删除', '5', 'ROLE_DEL', '2019-03-29 10:01:36');
 INSERT INTO `sys_permission` VALUES ('9', '用户查询', '1', 'USER_VIEW', '2019-03-29 10:05:41');
 INSERT INTO `sys_permission` VALUES ('10', '角色查看', '5', 'ROLE_VIEW', '2019-03-29 10:10:20');
+INSERT INTO `sys_permission` VALUES ('11', '权限管理', '0', 'PERMISSION_ALL', '2019-03-29 13:03:06');
+INSERT INTO `sys_permission` VALUES ('12', '权限查看', '11', 'PERMISSION_VIEW', '2019-03-29 13:04:42');
+INSERT INTO `sys_permission` VALUES ('13', '权限添加', '11', 'PERMISSION_ADD', '2019-03-29 13:04:45');
+INSERT INTO `sys_permission` VALUES ('14', '权限编辑', '11', 'PERMISSION_EDIT', '2019-03-29 13:04:47');
+INSERT INTO `sys_permission` VALUES ('15', '权限删除', '11', 'PERMISSION_DEL', '2019-03-29 13:04:48');
+INSERT INTO `sys_permission` VALUES ('20', '菜单查询', '19', 'MENU_VIEW', '2019-03-29 15:35:44');
+INSERT INTO `sys_permission` VALUES ('19', '菜单管理', '0', 'MENU_ALL', '2019-03-29 15:35:20');
+INSERT INTO `sys_permission` VALUES ('21', '菜单编辑', '19', 'MENU_EDIT', '2019-03-29 15:36:06');
+INSERT INTO `sys_permission` VALUES ('22', '菜单删除', '19', 'MENU_DEL', '2019-03-29 15:36:36');
+INSERT INTO `sys_permission` VALUES ('23', '菜单添加', '19', 'MENU_ADD', '2019-03-29 15:36:56');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -209,20 +219,30 @@ CREATE TABLE `sys_role_permission` (
 -- ----------------------------
 -- Records of sys_role_permission
 -- ----------------------------
-INSERT INTO `sys_role_permission` VALUES ('2', '1');
+INSERT INTO `sys_role_permission` VALUES ('23', '1');
+INSERT INTO `sys_role_permission` VALUES ('8', '1');
 INSERT INTO `sys_role_permission` VALUES ('3', '1');
-INSERT INTO `sys_role_permission` VALUES ('1', '1');
-INSERT INTO `sys_role_permission` VALUES ('4', '1');
+INSERT INTO `sys_role_permission` VALUES ('20', '1');
+INSERT INTO `sys_role_permission` VALUES ('12', '1');
 INSERT INTO `sys_role_permission` VALUES ('5', '1');
-INSERT INTO `sys_role_permission` VALUES ('6', '1');
 INSERT INTO `sys_role_permission` VALUES ('4', '2');
 INSERT INTO `sys_role_permission` VALUES ('1', '2');
 INSERT INTO `sys_role_permission` VALUES ('3', '2');
 INSERT INTO `sys_role_permission` VALUES ('2', '2');
-INSERT INTO `sys_role_permission` VALUES ('7', '1');
-INSERT INTO `sys_role_permission` VALUES ('8', '1');
 INSERT INTO `sys_role_permission` VALUES ('9', '1');
+INSERT INTO `sys_role_permission` VALUES ('15', '1');
+INSERT INTO `sys_role_permission` VALUES ('21', '1');
+INSERT INTO `sys_role_permission` VALUES ('19', '1');
+INSERT INTO `sys_role_permission` VALUES ('14', '1');
 INSERT INTO `sys_role_permission` VALUES ('10', '1');
+INSERT INTO `sys_role_permission` VALUES ('6', '1');
+INSERT INTO `sys_role_permission` VALUES ('2', '1');
+INSERT INTO `sys_role_permission` VALUES ('22', '1');
+INSERT INTO `sys_role_permission` VALUES ('11', '1');
+INSERT INTO `sys_role_permission` VALUES ('13', '1');
+INSERT INTO `sys_role_permission` VALUES ('1', '1');
+INSERT INTO `sys_role_permission` VALUES ('4', '1');
+INSERT INTO `sys_role_permission` VALUES ('7', '1');
 
 -- ----------------------------
 -- Table structure for sys_user
