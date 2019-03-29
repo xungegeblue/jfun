@@ -24,21 +24,21 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequiresPermissions(value = {"user:list"})
+    @RequiresPermissions(value = {"USER_VIEW", "USER_ALL"}, logical = Logical.OR)
     @GetMapping(value = "/user")
     public ResponseEntity user(Page page, User u) {
         IPage<User> iPage = userService.selectUserPage(page, u);
         return ResponseEntity.ok(iPage);
     }
 
-    @RequiresPermissions(value = {"user:add"})
+    @RequiresPermissions(value = {"USER_ADD", "USER_ALL"}, logical = Logical.OR)
     @PostMapping(value = "/user")
     public ResponseEntity user(@Validated @RequestBody User user) { //post使用@RequestBody接受数据
         User u = userService.create(user);
         return new ResponseEntity(u, HttpStatus.CREATED);
     }
 
-    @RequiresPermissions(value = {"user:edit"})
+    @RequiresPermissions(value = {"USER_EDIT", "USER_ALL"}, logical = Logical.OR)
     @PutMapping(value = "/user")
     public ResponseEntity edit(@Validated @RequestBody User user) {
         userService.update(user);
@@ -47,7 +47,7 @@ public class UserController {
 
 
     @DeleteMapping(value = "/users/{id}")
-    @RequiresPermissions(value = {"user:del"})
+    @RequiresPermissions(value = {"USER_DEL", "USER_ALL"}, logical = Logical.OR)
     public ResponseEntity delete(@PathVariable Long id) {
         userService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

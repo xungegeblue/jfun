@@ -30,20 +30,21 @@ public class RoleController {
     RoleService roleService;
     private static final String ENTITY_NAME = "role";
 
-    @RequiresPermissions(value = {"user:list", "role:list"}, logical = Logical.OR)
+    @RequiresPermissions(value = {"ROLE_VIEW","ROLE_ALL"},logical = Logical.OR)
     @GetMapping("/role/tree")
     public ResponseEntity tree() {
         Object roleTree = roleService.getRoleTree();
         return ResponseEntity.ok(roleTree);
     }
 
-
+    @RequiresPermissions(value = {"ROLE_VIEW","ROLE_ALL"},logical = Logical.OR)
     @GetMapping("/role")
     public ResponseEntity list(Role role, Page page) {
         IPage<Role> iPage = roleService.selectRolePage(page, role);
         return ResponseEntity.ok(iPage);
     }
 
+    @RequiresPermissions(value = {"ROLE_EDIT","ROLE_ALL"},logical = Logical.OR)
     @PutMapping("/role")
     public ResponseEntity edit(@RequestBody Role role) {
         if (role.getId() == null) {//简单的数据校验
@@ -53,12 +54,14 @@ public class RoleController {
         return ResponseEntity.ok().build();
     }
 
+    @RequiresPermissions(value = {"ROLE_DEL","ROLE_ALL"},logical = Logical.OR)
     @DeleteMapping("/role/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         roleService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
+    @RequiresPermissions(value = {"ROLE_VIEW","ROLE_ALL"},logical = Logical.OR)
     @GetMapping("/role/{id}")
     public ResponseEntity getRole(@PathVariable Long id) {
         Role role = roleService.findRoleById(id);
@@ -66,6 +69,7 @@ public class RoleController {
     }
 
     //新增角色
+    @RequiresPermissions(value = {"ROLE_ADD","ROLE_ALL"},logical = Logical.OR)
     @PostMapping("/role")
     public ResponseEntity create(@RequestBody Role role) {
         if (!StringUtils.isEmpty(role.getId())) {
@@ -75,6 +79,7 @@ public class RoleController {
         return new ResponseEntity(roleService.create(role), HttpStatus.CREATED);
     }
 
+    @RequiresPermissions(value = {"ROLE_EDIT","ROLE_ALL"},logical = Logical.OR)
     @Log(descript = "更新角色权限")
     @PutMapping("/role/permission")
     public ResponseEntity permission(@RequestBody Role resources) {
@@ -82,6 +87,7 @@ public class RoleController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @RequiresPermissions(value = {"ROLE_EDIT","ROLE_ALL"},logical = Logical.OR)
     @Log(descript = "更新角色菜单")
     @PutMapping("/role/menu")
     public ResponseEntity menu(@RequestBody Role resource) {
