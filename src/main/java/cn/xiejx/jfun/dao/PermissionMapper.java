@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -23,5 +24,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
     @Select("SELECT * FROM sys_permission WHERE pid=#{pid}")
     List<Permission> findByPid(@Param("pid") long pid);
 
-
+    @Select("SELECT * FROM sys_permission WHERE name=#{name}")
+    Permission selectByName(@Param("name") String name);
 }
