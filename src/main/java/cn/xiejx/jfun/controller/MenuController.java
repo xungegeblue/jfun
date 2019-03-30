@@ -74,7 +74,7 @@ public class MenuController {
     }
 
     @Log(descript = "编辑菜单")
-    @PutMapping("/memus")
+    @PutMapping("/menus")
     @RequiresPermissions(value = {"MENU_DEL", "MENU_ALL"}, logical = Logical.OR)
     public ResponseEntity edit(@RequestBody Menu menu) {
         menuService.edit(menu);
@@ -82,7 +82,7 @@ public class MenuController {
     }
 
     @Log(descript = "添加菜单")
-    @PostMapping("/menu")
+    @PostMapping("/menus")
     @RequiresPermissions(value = {"MENU_ADD", "MENU_ALL"}, logical = Logical.OR)
     public ResponseEntity add(@RequestBody @Validated Menu menu) {
         return ResponseEntity.status(HttpStatus.CREATED).body(menuService.create(menu));

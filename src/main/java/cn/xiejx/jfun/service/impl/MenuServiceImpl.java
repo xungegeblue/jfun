@@ -123,7 +123,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             throw new BadRequestException("该菜单不存在");
         }
         if (resources.getIFrame()) {
-            if (!(resources.getPath().toLowerCase().startsWith("http://")) || resources.getPath().toLowerCase().startsWith("https://")) {
+            if (!(resources.getPath().toLowerCase().startsWith("http://") || resources.getPath().toLowerCase().startsWith("https://"))) {
                 throw new BadRequestException("外链必须要http://或者https://开头");
             }
         }
