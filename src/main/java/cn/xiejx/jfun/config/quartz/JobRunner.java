@@ -30,7 +30,7 @@ public class JobRunner implements ApplicationRunner {
         List<QuartzJob> jobs = quartzJobService.findByIsPause(false);
 
         jobs.forEach(job -> {
-            quartzManage.andJob(job);
+            quartzManage.addJob(job);
         });
         System.out.println("============定时任务注入完成==========");
     }
