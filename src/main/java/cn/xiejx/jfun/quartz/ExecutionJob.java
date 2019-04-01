@@ -1,5 +1,6 @@
 package cn.xiejx.jfun.quartz;
 
+import cn.hutool.core.date.DateUtil;
 import cn.xiejx.jfun.entity.QuartzJob;
 import cn.xiejx.jfun.entity.QuartzLog;
 import cn.xiejx.jfun.service.QuartzJobService;
@@ -36,37 +37,40 @@ public class ExecutionJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        QuartzJob job = (QuartzJob) jobExecutionContext.getMergedJobDataMap().get(QuartzJob.JOB_KEY);
+        QuartzJob quartzJob = (QuartzJob) jobExecutionContext.getMergedJobDataMap().get(QuartzJob.JOB_KEY);
 
         QuartzLog log = new QuartzLog();
-        log.setJobName(job.getJobName());
-        log.setBeanName(job.getBeanName());
-        log.setCronExpression(job.getCronExpression());
-        log.setMethodName(job.getMethodName());
-        log.setParams(job.getParams());
-
-        logger.info("任务准备执行,任务名称{}", job.getBeanName());
         Long startTime = System.currentTimeMillis();
         try {
-            QuartzRunable task = new QuartzRunable(job.getBeanName(), job.getMethodName(), job.getParams());
+            log.setJobName(quartzJob.getJobName());
+            log.setBeanName(quartzJob.getBeanName());
+            log.setCronExpression(quartzJob.getCronExpression());
+            log.setMethodName(quartzJob.getMethodName());
+            log.setParams(quartzJob.getParams());
+
+            logger.info("任务准备执行,任务名称{}", quartzJob.getBeanName());
+
+
+            QuartzRunable task = new QuartzRunable(quartzJob.getBeanName(), quartzJob.getMethodName(), quartzJob.getParams());
             Future<?> future = executorService.submit(task);
             future.get();
             log.setIsSuccess(true);
             Long times = System.currentTimeMillis() - startTime;
             log.setTime(times);
-            logger.info("任务执行完毕,任务名称:{},执行耗时:{}", job.getBeanName(), times);
+            logger.info("任务执行完毕,任务名称:{},执行耗时:{}", quartzJob.getBeanName(), times);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("任务执行失败,任务名称:{}", job.getBeanName(), e);
+            logger.error("任务执行失败,任务名称:{}", quartzJob.getBeanName(), e);
             log.setIsSuccess(false);
             log.setTime(System.currentTimeMillis() - startTime);
             log.setExceptionDetail(ThrowableUtil.getStackTrace(e));
 
             //更新状态
-            job.setIsPause(true);
-            quartzJobService.updateJobPauseStatus(job);//强制暂停,方法里面会自动暂停调度
+            quartzJob.setIsPause(true);
+            quartzJobService.updateJobPauseStatus(quartzJob);//强制暂停,方法里面会自动暂停调度
 
         } finally {
+            log.setCreateTime(DateUtil.date().toTimestamp());
             //保存日志
             quartzLogService.create(log);
         }

@@ -42,7 +42,7 @@ public class QuartzJobController {
     @Log(descript = "修改定时任务")
     @PutMapping("/jobs")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
-    public ResponseEntity edit(QuartzJob job) {
+    public ResponseEntity edit(@RequestBody QuartzJob job) {
         if (job.getId() == null) {
             throw new BadRequestException("编辑的任务ID不为空");
         }
@@ -59,9 +59,9 @@ public class QuartzJobController {
         jobService.updateJobPauseStatus(job);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    //这里是Put请求
     @Log(descript = "运行定时任务")
-    @GetMapping("/jobs/exec/{id}")
+    @PutMapping("/jobs/exec/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
     public ResponseEntity run(@PathVariable Long id) {
         QuartzJob quartzJob = jobService.findById(id);
@@ -70,7 +70,7 @@ public class QuartzJobController {
     }
 
     @Log(descript = "删除定时任务")
-    @DeleteMapping("/job/{id}")
+    @DeleteMapping("/jobs/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_DEL"}, logical = Logical.OR)
     public ResponseEntity delete(@PathVariable Long id) {
         jobService.deleteJob(jobService.findById(id));

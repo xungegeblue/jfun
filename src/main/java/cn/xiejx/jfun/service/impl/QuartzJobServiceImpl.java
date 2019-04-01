@@ -1,5 +1,6 @@
 package cn.xiejx.jfun.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.xiejx.jfun.config.exection.BadRequestException;
 import cn.xiejx.jfun.dao.QuartzJobMapper;
 import cn.xiejx.jfun.quartz.QuartzManage;
@@ -7,6 +8,7 @@ import cn.xiejx.jfun.entity.QuartzJob;
 import cn.xiejx.jfun.service.QuartzJobService;
 import cn.xiejx.jfun.vo.Page;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.quartz.CronExpression;
@@ -30,6 +32,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
         if (!CronExpression.isValidExpression(job.getCronExpression())) {
             throw new BadRequestException("cron 表达式错误!");
         }
+        job.setUpdateTime(DateUtil.date().toTimestamp());
         int i = baseMapper.insert(job);
         //添加定时任务
         quartzManage.addJob(job);
@@ -48,7 +51,8 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
     @Transactional(rollbackFor = Exception.class)
     @Override
     public IPage<QuartzJob> queryAll(QuartzJob job, Page pae) {
-        return baseMapper.selectPage(pae, Wrappers.<QuartzJob>lambdaQuery().eq(QuartzJob::getJobName, job.getJobName()));
+        //对象里面如果jobName=null查询就出问题了
+        return baseMapper.selectPage(pae, Wrappers.<QuartzJob>lambdaQuery().eq(StringUtils.isNotEmpty(job.getJobName()),QuartzJob::getJobName, job.getJobName()));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -57,6 +61,7 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
         if (!CronExpression.isValidExpression(resource.getCronExpression())) {
             throw new BadRequestException("cron 表达式错误");
         }
+        resource.setUpdateTime(DateUtil.date().toTimestamp());
         baseMapper.updateById(resource);
         quartzManage.updateJobCron(resource);
     }

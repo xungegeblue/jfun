@@ -73,6 +73,8 @@ public class QuartzManage {
             if (trigger == null) {
                 addJob(quartzJob);
             }
+            trigger.getJobDataMap().put(QuartzJob.JOB_KEY, quartzJob);
+
             JobKey jobKey = JobKey.jobKey(JOB_NAME + quartzJob.getId());
             scheduler.resumeJob(jobKey);
         } catch (SchedulerException e) {
@@ -103,6 +105,7 @@ public class QuartzManage {
                     .startNow()
                     .withSchedule(CronScheduleBuilder.cronSchedule(resource.getCronExpression()))
                     .build();
+            trigger.getJobDataMap().put(QuartzJob.JOB_KEY, resource);
             //重置启动时间
             ((CronTriggerImpl) trigger).setStartTime(new Date());
 
