@@ -12,13 +12,11 @@ public interface QuartzJobService {
 
     List<QuartzJob> findByIsPause(boolean pause);
 
-    void updateIsPause(QuartzJob job);
-
     IPage<QuartzJob> queryAll(QuartzJob job, Page pae);
 
     void edit(QuartzJob job);
 
-    void updateStatus(Long id);
+    void updateJobPauseStatus(QuartzJob quartzJob);
 
     void exec(QuartzJob job);
 

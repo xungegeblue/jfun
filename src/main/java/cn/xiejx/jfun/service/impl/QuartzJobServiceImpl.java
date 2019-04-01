@@ -44,13 +44,6 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
         return jobs;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateIsPause(QuartzJob job) {
-        QuartzJob db = baseMapper.selectById(job.getId());
-        db.setIsPause(job.getIsPause());
-        baseMapper.updateById(db);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -68,23 +61,23 @@ public class QuartzJobServiceImpl extends ServiceImpl<QuartzJobMapper, QuartzJob
         quartzManage.updateJobCron(resource);
     }
 
+    //更新任务状态(如果任务需要暂停需要设置pause=true
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateStatus(Long id) {
-        QuartzJob quartzJob = baseMapper.selectById(id);
-        if (quartzJob == null) {
-            throw new BadRequestException("改任务不存在");
+    public void updateJobPauseStatus(QuartzJob quartzJob) {
+        if (quartzJob.getId() == null) {
+            throw new BadRequestException("该任务不存在");
         }
-        boolean isPause = quartzJob.getIsPause();
-        if (isPause) {
-            //恢复
-            quartzManage.resumeJob(quartzJob);
-        } else {
+        if (quartzJob.getIsPause()) {
             //暂停
             quartzManage.pauseJob(quartzJob);
+        } else {
+            //恢复
+            quartzManage.resumeJob(quartzJob);
         }
-        quartzJob.setIsPause(!isPause);
-        baseMapper.updateById(quartzJob);
+        QuartzJob dbJob = baseMapper.selectById(quartzJob.getId());
+        dbJob.setIsPause(quartzJob.getIsPause());
+        baseMapper.updateById(dbJob);
     }
 
     @Transactional(rollbackFor = Exception.class)

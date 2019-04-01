@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +54,9 @@ public class QuartzJobController {
     @PutMapping("/jobs/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
     public ResponseEntity status(@PathVariable Long id) {
-        jobService.updateStatus(id);
+        QuartzJob job = jobService.findById(id);
+        job.setIsPause(!job.getIsPause());
+        jobService.updateJobPauseStatus(job);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

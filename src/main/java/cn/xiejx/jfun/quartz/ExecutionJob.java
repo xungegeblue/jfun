@@ -32,6 +32,7 @@ public class ExecutionJob extends QuartzJobBean {
 
     @Autowired
     private QuartzLogService quartzLogService;
+
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
@@ -44,30 +45,28 @@ public class ExecutionJob extends QuartzJobBean {
         log.setMethodName(job.getMethodName());
         log.setParams(job.getParams());
 
-        logger.info("任务准备执行,任务名称{}",job.getBeanName());
+        logger.info("任务准备执行,任务名称{}", job.getBeanName());
         Long startTime = System.currentTimeMillis();
         try {
-            QuartzRunable task = new QuartzRunable(job.getBeanName(),job.getMethodName(),job.getParams());
+            QuartzRunable task = new QuartzRunable(job.getBeanName(), job.getMethodName(), job.getParams());
             Future<?> future = executorService.submit(task);
             future.get();
             log.setIsSuccess(true);
             Long times = System.currentTimeMillis() - startTime;
             log.setTime(times);
-            logger.info("任务执行完毕,任务名称:{},执行耗时:{}",job.getBeanName(),times);
+            logger.info("任务执行完毕,任务名称:{},执行耗时:{}", job.getBeanName(), times);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("任务执行失败,任务名称:{}",job.getBeanName(),e);
+            logger.error("任务执行失败,任务名称:{}", job.getBeanName(), e);
             log.setIsSuccess(false);
-            log.setTime(System.currentTimeMillis()-startTime);
+            log.setTime(System.currentTimeMillis() - startTime);
             log.setExceptionDetail(ThrowableUtil.getStackTrace(e));
 
-            //暂停任务
-            manage.pauseJob(job);
-
             //更新状态
-            quartzJobService.updateIsPause(job);
+            job.setIsPause(true);
+            quartzJobService.updateJobPauseStatus(job);//强制暂停,方法里面会自动暂停调度
 
-        }finally {
+        } finally {
             //保存日志
             quartzLogService.create(log);
         }

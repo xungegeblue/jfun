@@ -75,3 +75,7 @@ pagehelper:
   params: count=countSql
   reasonable: true
   support-methods-arguments: true
+
+#是否允许生成代码，生产环境设置为false
+generator:
+  enabled: true
