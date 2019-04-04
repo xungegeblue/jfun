@@ -26,7 +26,7 @@ public class QuartzLogController {
     @Log(descript = "获取定时任务的执行日志")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_VIEW", "JOB_EDIT"}, logical = Logical.OR)
     @GetMapping("/quartz/log")
-    public ResponseEntity logs(@RequestBody QuartzLog quartzLog,@RequestBody Page page) {
+    public ResponseEntity logs(QuartzLog quartzLog,Page page) {
         return ResponseEntity.ok(quartzLogService.queryAll(quartzLog,page));
     }
 }
