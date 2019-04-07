@@ -1,11 +1,13 @@
 package cn.xiejx.jfun.service.impl;
 
+import cn.xiejx.jfun.config.exection.BadRequestException;
 import cn.xiejx.jfun.dao.GeneratorMapper;
 import cn.xiejx.jfun.entity.GenConfig;
 import cn.xiejx.jfun.entity.User;
 import cn.xiejx.jfun.service.GeneratorService;
 import cn.xiejx.jfun.service.vo.ColumnInfo;
 import cn.xiejx.jfun.service.vo.TableInfo;
+import cn.xiejx.jfun.util.GenUtil;
 import cn.xiejx.jfun.vo.Page;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -38,13 +40,13 @@ public class GeneratorServiceImpl implements GeneratorService {
     public List<ColumnInfo> getColumnInfo(String tableName) {
         List<ColumnInfo> columns = new ArrayList<>();
         List<Map> map = generatorMapper.getColumns(tableName);
-        map.forEach(m ->{
+        map.forEach(m -> {
             String column_name = (String) m.get("column_name");
             String is_nullable = (String) m.get("is_nullable");
             String data_type = (String) m.get("data_type");
             String column_comment = (String) m.get("column_comment");
-            String column_key = (String)m.get("column_key");
-            ColumnInfo c = new ColumnInfo(column_name,is_nullable,data_type,column_comment,column_key,null,null);
+            String column_key = (String) m.get("column_key");
+            ColumnInfo c = new ColumnInfo(column_name, is_nullable, data_type, column_comment, column_key, null, null);
             columns.add(c);
         });
         return columns;
@@ -59,6 +61,11 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void generator(GenConfig genConfig, String tableName, List<ColumnInfo> columnInfos) {
+        if (genConfig == null) {
+            throw new BadRequestException("请先配置生成器");
+        }
+
+        GenUtil.generatorCode(genConfig,tableName,columnInfos);
 
     }
 }
