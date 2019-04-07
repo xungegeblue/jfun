@@ -15,10 +15,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author 谢镜勋
@@ -51,12 +55,15 @@ public class GeneratorController {
     @GetMapping(value = "/generator/columns")
     public ResponseEntity getColumns(@RequestParam String tableName) {
         List<ColumnInfo> columns = generatorService.getColumnInfo(tableName);
-        return ResponseEntity.ok(columns);
+        Map<String,Object> data = new HashMap<>();
+        data.put("records",columns);
+        data.put("total",columns.size());
+        return ResponseEntity.ok(data);
     }
-
+    //不可以使用path和requestbody，可以使用requestParam和requestBody
     @RequiresPermissions(value = {"GENERATOR_CODE"})
     @Log(descript = "生成代码")
-    @GetMapping(value = "/generator")
+    @PostMapping(value = "/generator")
     public ResponseEntity generator(@RequestBody List<ColumnInfo> columnInfos, @RequestParam String tableName) {
         if (!generatorEnabled) {
             throw new BadRequestException("此环境不允许生成代码！");
@@ -69,13 +76,6 @@ public class GeneratorController {
         return ResponseEntity.ok().build();
     }
 
-    @Log(descript = "获取生成器配置")
-    @GetMapping(value = "/genConfig/{id}")
-    @RequiresPermissions(value = {"GENERATOR_CODE"})
-    public ResponseEntity getGenerator(@PathVariable(required = true) Long id) {
-        GenConfig genConfig = genConfigService.findById(id);
-        return ResponseEntity.ok(genConfig);
-    }
 
 
 }

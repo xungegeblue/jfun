@@ -19,4 +19,10 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     public GenConfig findById(Long id) {
         return baseMapper.selectById(id);
     }
+
+    @Override
+    public GenConfig update(GenConfig genConfig) {
+        int p = baseMapper.updateById(genConfig);
+        return p > 0 ? genConfig : null;
+    }
 }

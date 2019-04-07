@@ -8,4 +8,6 @@ import cn.xiejx.jfun.entity.GenConfig;
  */
 public interface GenConfigService {
     public GenConfig findById(Long id);
+
+    GenConfig update(GenConfig genConfig);
 }
