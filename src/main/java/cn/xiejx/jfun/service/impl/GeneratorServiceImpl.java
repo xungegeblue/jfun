@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,12 @@ public class GeneratorServiceImpl implements GeneratorService {
             throw new BadRequestException("请先配置生成器");
         }
 
-        GenUtil.generatorCode(genConfig,tableName,columnInfos);
+        try {
+            GenUtil.generatorCode(genConfig,tableName,columnInfos);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BadRequestException("生成代码失败");
+        }
 
     }
 }
