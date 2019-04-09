@@ -19,7 +19,7 @@ public class GenConfigController {
     @Autowired
     private GenConfigService genConfigService;
 
-    @Log(descript = "获取生成器配置")
+    @Log("获取生成器配置")
     @GetMapping(value = "/genConfig")
     @RequiresPermissions(value = {"GENERATOR_CODE"})
     public ResponseEntity getGenerator() {
@@ -27,7 +27,7 @@ public class GenConfigController {
         return ResponseEntity.ok(genConfig);
     }
 
-    @Log(descript = "设置生成器配置")
+    @Log("设置生成器配置")
     @PutMapping(value = "/genConfig")
     public ResponseEntity emailConfig(@Validated @RequestBody GenConfig genConfig){
         return new ResponseEntity(genConfigService.update(genConfig), HttpStatus.OK);

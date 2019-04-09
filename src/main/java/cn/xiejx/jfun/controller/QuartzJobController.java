@@ -21,14 +21,14 @@ public class QuartzJobController {
     QuartzJobService jobService;
 
 
-    @Log(descript = "查询定时任务")
+    @Log("查询定时任务")
     @GetMapping("/jobs")
     @RequiresPermissions(value = {"JOB_VIEW", "JOB_ALL"}, logical = Logical.OR)
     public ResponseEntity getJobs(QuartzJob job, Page pae) {
         return ResponseEntity.ok(jobService.queryAll(job, pae));
     }
 
-    @Log(descript = "创建定时任务")
+    @Log("创建定时任务")
     @PostMapping("/jobs")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_ADD"}, logical = Logical.OR)
     public ResponseEntity create(@RequestBody QuartzJob job) {
@@ -39,7 +39,7 @@ public class QuartzJobController {
         return ResponseEntity.status(HttpStatus.CREATED).body(j);
     }
 
-    @Log(descript = "修改定时任务")
+    @Log("修改定时任务")
     @PutMapping("/jobs")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
     public ResponseEntity edit(@RequestBody QuartzJob job) {
@@ -50,7 +50,7 @@ public class QuartzJobController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Log(descript = "修改定时任务状态(恢复或者执行)")
+    @Log("修改定时任务状态(恢复或者执行)")
     @PutMapping("/jobs/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
     public ResponseEntity status(@PathVariable Long id) {
@@ -60,7 +60,7 @@ public class QuartzJobController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     //这里是Put请求
-    @Log(descript = "运行定时任务")
+    @Log("运行定时任务")
     @PutMapping("/jobs/exec/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_EDIT"}, logical = Logical.OR)
     public ResponseEntity run(@PathVariable Long id) {
@@ -69,7 +69,7 @@ public class QuartzJobController {
         return ResponseEntity.ok().build();
     }
 
-    @Log(descript = "删除定时任务")
+    @Log("删除定时任务")
     @DeleteMapping("/jobs/{id}")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_DEL"}, logical = Logical.OR)
     public ResponseEntity delete(@PathVariable Long id) {

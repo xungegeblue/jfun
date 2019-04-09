@@ -1,5 +1,7 @@
 package cn.xiejx.jfun.util;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.template.*;
 import cn.xiejx.jfun.entity.GenConfig;
@@ -13,10 +15,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cn.hutool.core.date.DatePattern.NORM_DATETIME_PATTERN;
 
 /**
  * @Auther: miv
@@ -32,7 +37,7 @@ public class GenUtil {
     private static final String BIGDECIMAL = "BigDecimal";
 
     private static final String PK = "PRI";
-    
+
     /*
      * @Author miv
      * @Description 代码生成
@@ -47,9 +52,12 @@ public class GenUtil {
         map.put("tableName", tableName);
         String className = NameUtil.toCapitalizeCamelCase(tableName);
         map.put("className", className);
+        map.put("classNameLower", NameUtil.toCapitalizeCamelCaseLower(tableName));
 
         map.put("hasTimestamp", false);
         map.put("hasBigDecimal", false);
+        map.put("author", genConfig.getAuthor());
+        map.put("date", DateTime.now().toString(NORM_DATETIME_PATTERN));
 
 
         List<Map<String, Object>> columns = new ArrayList<>();
@@ -120,6 +128,26 @@ public class GenUtil {
             return packagePath + "entity" + File.separator + className + ".java";
         }
 
+        if ("Mapper".equals(templateName)) {
+            return packagePath + "dao" + File.separator + className + "Mapper.java";
+        }
+
+        if ("MapperXml".equals(templateName)) {
+            return ProjectPath + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + className + "Mapper.xml";
+        }
+
+        if ("Service".equals(templateName)) {
+            return packagePath + "service" + File.separator + className + "Service.java";
+        }
+        if ("ServiceImpl".equals(templateName)) {
+            return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+        }
+        if ("Controller".equals(templateName)) {
+            return packagePath + "controller" + File.separator +  className + "Controller.java";
+        }
+        if ("Dto".equals(templateName)) {
+            return packagePath + "service" + File.separator + "dto" + File.separator + className +"DTO.java";
+        }
         return null;
     }
 
@@ -131,11 +159,12 @@ public class GenUtil {
     public static List<String> getBackTemplateNames() {
         List<String> templateNames = new ArrayList<>();
         templateNames.add("Entity");
-//        templateNames.add("Mapper");
-//        templateNames.add("Controller");
-//        templateNames.add("Service");
-//        templateNames.add("ServiceImpl");
-//        templateNames.add("Dto");
+        templateNames.add("Mapper");
+        templateNames.add("MapperXml");
+        templateNames.add("Service");
+        templateNames.add("ServiceImpl");
+        templateNames.add("Controller");
+        templateNames.add("Dto");
         return templateNames;
     }
 

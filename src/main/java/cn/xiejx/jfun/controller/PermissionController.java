@@ -38,7 +38,7 @@ public class PermissionController {
     }
 
     @RequiresPermissions(value = {"PERMISSION_VIEW", "PERMISSION_ALL"}, logical = Logical.OR)
-    @Log(descript = "查询权限")
+    @Log("查询权限")
     @GetMapping("/permission")
     public ResponseEntity view(@RequestParam(defaultValue = "",required = false) String name, Page page) {
         List<PermissionDTO> list =  permissionService.getPermissionData(permissionService.queryAll(name));
@@ -46,7 +46,7 @@ public class PermissionController {
     }
 
     @RequiresPermissions(value = {"PERMISSION_ADD", "PERMISSION_ALL"}, logical = Logical.OR)
-    @Log(descript = "添加权限")
+    @Log("添加权限")
     @PostMapping("/permission")
     public ResponseEntity add(@RequestBody  Permission resource) {
         //做基本的校验，设置基础数据
@@ -59,7 +59,7 @@ public class PermissionController {
     }
 
     @RequiresPermissions(value = {"PERMISSION_EDIT", "PERMISSION_ALL"}, logical = Logical.OR)
-    @Log(descript = "编辑权限")
+    @Log("编辑权限")
     @PutMapping("/permission")
     public ResponseEntity edit(@RequestBody Permission resource) {
         if (resource.getId() == null) {
@@ -70,7 +70,7 @@ public class PermissionController {
     }
 
     @RequiresPermissions(value = {"PERMISSION_DEL", "PERMISSION_ALL"}, logical = Logical.OR)
-    @Log(descript = "删除权限")
+    @Log("删除权限")
     @DeleteMapping("/permission/{id}")
     public ResponseEntity del(@PathVariable("id") Long id) {
         permissionService.delete(id);

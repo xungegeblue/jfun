@@ -1,7 +1,5 @@
-package ${package}.entity;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+package ${package}.service.dto;
+
 import lombok.Data;
 <#if hasTimestamp>
 import java.sql.Timestamp;
@@ -13,17 +11,13 @@ import java.math.BigDecimal;
 
 
 @Data
-@TableName(value = "${tableName}")
-public class ${className}{
+public class ${className}DTO{
 <#if columns??>
     <#list columns as column>
         <#if column.columnComment != ''>
         /**
          * ${column.columnComment}
          */
-        </#if>
-        <#if column.columnKey = 'PRI'>
-        @TableId(type = IdType.AUTO)
         </#if>
          private ${column.columnType} ${column.changeColumnName};
     </#list>

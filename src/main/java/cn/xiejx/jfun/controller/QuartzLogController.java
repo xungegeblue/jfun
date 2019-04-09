@@ -23,7 +23,7 @@ public class QuartzLogController {
     @Autowired
     QuartzLogService quartzLogService;
 
-    @Log(descript = "获取定时任务的执行日志")
+    @Log("获取定时任务的执行日志")
     @RequiresPermissions(value = {"JOB_ALL", "JOB_VIEW", "JOB_EDIT"}, logical = Logical.OR)
     @GetMapping("/quartz/log")
     public ResponseEntity logs(QuartzLog quartzLog,Page page) {

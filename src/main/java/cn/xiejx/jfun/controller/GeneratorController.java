@@ -43,7 +43,7 @@ public class GeneratorController {
     private GenConfigService genConfigService;
 
     @RequiresPermissions(value = {"GENERATOR_CODE"})
-    @Log(descript = "获取表格信息")
+    @Log("获取表格信息")
     @GetMapping(value = "/generator/tables")
     public ResponseEntity getTables(@RequestParam(required = false, defaultValue = "") String name, Page page) {
         IPage<TableInfo> tables = generatorService.getTables(name, page);
@@ -51,7 +51,7 @@ public class GeneratorController {
     }
 
     @RequiresPermissions(value = {"GENERATOR_CODE"})
-    @Log(descript = "获取表格列信息")
+    @Log("获取表格列信息")
     @GetMapping(value = "/generator/columns")
     public ResponseEntity getColumns(@RequestParam String tableName) {
         List<ColumnInfo> columns = generatorService.getColumnInfo(tableName);
@@ -62,7 +62,7 @@ public class GeneratorController {
     }
     //不可以使用path和requestbody，可以使用requestParam和requestBody
     @RequiresPermissions(value = {"GENERATOR_CODE"})
-    @Log(descript = "生成代码")
+    @Log("生成代码")
     @PostMapping(value = "/generator")
     public ResponseEntity generator(@RequestBody List<ColumnInfo> columnInfos, @RequestParam String tableName) {
         if (!generatorEnabled) {

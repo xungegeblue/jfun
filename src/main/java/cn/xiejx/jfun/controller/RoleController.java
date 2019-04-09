@@ -80,7 +80,7 @@ public class RoleController {
     }
 
     @RequiresPermissions(value = {"ROLE_EDIT","ROLE_ALL"},logical = Logical.OR)
-    @Log(descript = "更新角色权限")
+    @Log("更新角色权限")
     @PutMapping("/role/permission")
     public ResponseEntity permission(@RequestBody Role resources) {
         roleService.updatePermission(resources);
@@ -88,7 +88,7 @@ public class RoleController {
     }
 
     @RequiresPermissions(value = {"ROLE_EDIT","ROLE_ALL"},logical = Logical.OR)
-    @Log(descript = "更新角色菜单")
+    @Log("更新角色菜单")
     @PutMapping("/role/menu")
     public ResponseEntity menu(@RequestBody Role resource) {
         roleService.updateMenu(resource);

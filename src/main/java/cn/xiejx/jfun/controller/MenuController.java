@@ -56,7 +56,7 @@ public class MenuController {
         return new ResponseEntity(menuService.getMenuTree(menuService.findByPid(0L)), HttpStatus.OK);
     }
 
-    @Log(descript = "查询菜单")
+    @Log("查询菜单")
     @RequiresPermissions(value = {"MENU_VIEW", "MENU_ALL"}, logical = Logical.OR)
     @GetMapping("/menus")
     public ResponseEntity view(@RequestParam(defaultValue = "",required = false) String name) {
@@ -65,7 +65,7 @@ public class MenuController {
     }
 
 
-    @Log(descript = "删除菜单")
+    @Log("删除菜单")
     @RequiresPermissions(value = {"MENU_DEL", "MENU_ALL"}, logical = Logical.OR)
     @DeleteMapping("/menus/{id}")
     public ResponseEntity del(@PathVariable Long id) {
@@ -73,7 +73,7 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Log(descript = "编辑菜单")
+    @Log("编辑菜单")
     @PutMapping("/menus")
     @RequiresPermissions(value = {"MENU_DEL", "MENU_ALL"}, logical = Logical.OR)
     public ResponseEntity edit(@RequestBody Menu menu) {
@@ -81,7 +81,7 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @Log(descript = "添加菜单")
+    @Log("添加菜单")
     @PostMapping("/menus")
     @RequiresPermissions(value = {"MENU_ADD", "MENU_ALL"}, logical = Logical.OR)
     public ResponseEntity add(@RequestBody @Validated Menu menu) {

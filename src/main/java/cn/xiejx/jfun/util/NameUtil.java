@@ -21,6 +21,22 @@ public class NameUtil {
         s = toCamelCase(s);
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
+
+    public static String toCapitalizeCamelCaseLower(String s) {
+        if (s == null) {
+            return null;
+        }
+        if (s.length() == 1) {
+            return s;
+        }
+        String t = toCapitalizeCamelCase(s);
+        return t.substring(0, 1).toLowerCase() + t.substring(1, t.length());
+    }
+
+    public static void main(String[] args) {
+        String a =  "Aaa_bb_cc";
+        System.out.println(toCapitalizeCamelCaseLower(a));
+    }
     public static String toCamelCase(String s) {
         if (s == null) {
             return null;
