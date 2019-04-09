@@ -69,5 +69,8 @@ public class Log {
      */
     @TableField(value = "create_time")
     private Timestamp createTime;
-
+    public Log(String logType, Long time) {
+        this.logType = logType;
+        this.time = time;
+    }
 }
