@@ -53,14 +53,17 @@ public class GenUtil {
         String className = NameUtil.toCapitalizeCamelCase(tableName);
         map.put("className", className);
         map.put("classNameLower", NameUtil.toCapitalizeCamelCaseLower(tableName));
-
+        map.put("changeClassName", NameUtil.toCamelCase(tableName));
         map.put("hasTimestamp", false);
         map.put("hasBigDecimal", false);
+        map.put("hasQuery", false);
         map.put("author", genConfig.getAuthor());
         map.put("date", DateTime.now().toString(NORM_DATETIME_PATTERN));
 
 
         List<Map<String, Object>> columns = new ArrayList<>();
+        List<Map<String,Object>> queryColumns = new ArrayList<>();//需要查询的列信息
+
         for (ColumnInfo column : columnInfos) {
             Map<String, Object> listMap = new HashMap();
             listMap.put("columnComment", column.getColumnComment());
@@ -83,23 +86,25 @@ public class GenUtil {
             listMap.put("changeColumnName", NameUtil.toCamelCase(column.getColumnName().toString()));
             listMap.put("capitalColumnName", NameUtil.toCapitalizeCamelCase(column.getColumnName().toString()));
 
-            if (!StringUtils.isEmpty(column.getColumnQuery())) {
+            if (!StringUtils.isEmpty(column.getColumnQuery())) { //columnQuery=1模糊查询columnQuery=2精确查询
                 listMap.put("columnQuery", column.getColumnQuery());
                 map.put("hasQuery", true);
-
+                queryColumns.add(listMap);
             }
 
             columns.add(listMap);
 
         }
+        map.put("queryColumns",queryColumns);
         map.put("columns", columns);
 
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
         //生成后台代码
+
         List<String> templates = getBackTemplateNames();
         for (String templateName : templates) {
-            Template template = engine.getTemplate("generator/back/" + templateName + ".ftl");
-            String filePath = getBackFilePath(templateName, genConfig, className);
+            Template template = engine.getTemplate("generator/front/" + templateName + ".ftl");
+            String filePath = getFrontFilePath(templateName, genConfig, className);
             File file = new File(filePath);
 
             // 如果非覆盖生成
@@ -111,7 +116,62 @@ public class GenUtil {
             // 生成代码
             renderFile(file, template, map);
         }
+
         //生成前端代码
+        templates = getFrontTemplateNames();
+        for (String templateName : templates) {
+            Template template = engine.getTemplate("generator/front/" + templateName + ".ftl");
+            String filePath = getFrontFilePath(templateName, genConfig, map.get("changeClassName").toString());
+            File file = new File(filePath);
+
+            // 如果非覆盖生成
+            if (!genConfig.getCover()) {
+                if (FileUtil.exist(file)) {
+                    continue;
+                }
+            }
+            // 生成代码
+            renderFile(file, template, map);
+        }
+    }
+
+    /*
+     * @Author miv
+     * @Description 获取前端模板文件名称
+     * @Date 22:34 2019-04-07
+     */
+    public static List<String> getFrontTemplateNames() {
+        List<String> templateNames = new ArrayList<>();
+        templateNames.add("api");
+        templateNames.add("index");
+        templateNames.add("header");
+        templateNames.add("edit");
+        templateNames.add("eForm");
+        return templateNames;
+    }
+
+
+    private static String getFrontFilePath(String templateName, GenConfig genConfig, String apiName) {
+        String path = genConfig.getPath();
+        if ("api".equals(templateName)) {
+            return genConfig.getApiPath() + File.separator + apiName + ".js";
+        }
+        if ("index".equals(templateName)) {
+            return path  + File.separator + "index.vue";
+        }
+
+        if ("header".equals(templateName)) {
+            return path  + File.separator + "module" + File.separator + "header.vue";
+        }
+
+        if ("edit".equals(templateName)) {
+            return path  + File.separator + "module" + File.separator + "edit.vue";
+        }
+
+        if ("eForm".equals(templateName)) {
+            return path  + File.separator + "module" + File.separator + "form.vue";
+        }
+        return null;
     }
 
     public static String getBackFilePath(String templateName, GenConfig genConfig, String className) {
@@ -143,10 +203,10 @@ public class GenUtil {
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
         }
         if ("Controller".equals(templateName)) {
-            return packagePath + "controller" + File.separator +  className + "Controller.java";
+            return packagePath + "controller" + File.separator + className + "Controller.java";
         }
         if ("Dto".equals(templateName)) {
-            return packagePath + "service" + File.separator + "dto" + File.separator + className +"DTO.java";
+            return packagePath + "service" + File.separator + "dto" + File.separator + className + "DTO.java";
         }
         return null;
     }
@@ -168,20 +228,7 @@ public class GenUtil {
         return templateNames;
     }
 
-    /*
-     * @Author miv
-     * @Description 获取前端模板文件名称
-     * @Date 22:34 2019-04-07
-     */
-    public static List<String> getFrontTemplateNames() {
-        List<String> templateNames = new ArrayList<>();
-        templateNames.add("api");
-        templateNames.add("index");
-        templateNames.add("header");
-        templateNames.add("edit");
-        templateNames.add("eForm");
-        return templateNames;
-    }
+
 
     /*
      * @Author miv

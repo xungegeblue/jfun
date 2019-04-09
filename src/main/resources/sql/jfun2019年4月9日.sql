@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-04-09 13:52:51
+Date: 2019-04-09 16:31:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,7 @@ CREATE TABLE `gen_config` (
 -- ----------------------------
 -- Records of gen_config
 -- ----------------------------
-INSERT INTO `gen_config` VALUES ('1', 'miv', '\0', 'eladmin-system', 'cn.xiejx.jfun', 'E:\\workspace\\my-workspace\\eladmin-qt\\src\\views\\system\\test', 'E:\\workspace\\my-workspace\\eladmin-qt\\src\\api');
+INSERT INTO `gen_config` VALUES ('1', 'miv', '', 'eladmin-system', 'cn.xiejx.jfun', 'D:\\code\\xiejx\\jfun-ui\\src\\views\\system\\testStudent', 'D:\\code\\xiejx\\jfun-ui\\src\\api');
 
 -- ----------------------------
 -- Table structure for hibernate_sequence
@@ -707,7 +707,7 @@ INSERT INTO `sys_menu` VALUES ('18', '2018-12-31 11:12:15', '\0', '七牛云存�
 INSERT INTO `sys_menu` VALUES ('19', '2018-12-31 14:52:38', '\0', '支付宝工具', 'tools/aliPay/index', '13', '34', 'alipay', 'aliPay');
 INSERT INTO `sys_menu` VALUES ('21', '2019-01-04 16:22:03', '\0', '多级菜单', '', '0', '900', 'menu', 'nested');
 INSERT INTO `sys_menu` VALUES ('22', '2019-01-04 16:23:29', '\0', '二级菜单1', 'nested/menu1/index', '21', '999', 'menu', 'menu1');
-INSERT INTO `sys_menu` VALUES ('23', '2019-01-04 16:23:57', '\0', '二级菜单2', 'nested/menu2/index', '21', '999', 'menu', 'menu2');
+INSERT INTO `sys_menu` VALUES ('23', '2019-01-04 16:23:57', '\0', '测试学生', 'system/testStudent/index', '21', '999', 'menu', 'menu2');
 INSERT INTO `sys_menu` VALUES ('24', '2019-01-04 16:24:48', '\0', '三级菜单1', 'nested/menu1/menu1-1', '22', '999', 'menu', 'menu1-1');
 INSERT INTO `sys_menu` VALUES ('27', '2019-01-07 17:27:32', '\0', '三级菜单2', 'nested/menu1/menu1-2', '22', '999', 'menu', 'menu1-2');
 INSERT INTO `sys_menu` VALUES ('28', '2019-01-07 20:34:40', '\0', '定时任务', 'system/timing/index', '1', '6', 'timing', 'timing');
@@ -942,14 +942,15 @@ INSERT INTO `sys_user_role` VALUES ('42', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `test_student`;
 CREATE TABLE `test_student` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `age` int(12) DEFAULT NULL,
-  `message` varchar(255) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `age` int(12) DEFAULT NULL COMMENT '年龄',
+  `message` varchar(255) DEFAULT NULL COMMENT '信息',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of test_student
 -- ----------------------------
 INSERT INTO `test_student` VALUES ('1', 'aa', '12', 'asds');
+INSERT INTO `test_student` VALUES ('3', '啊啊', '23', '是是是');
