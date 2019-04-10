@@ -32,7 +32,7 @@ public class PermissionController {
 
     public static final String ENTITY_NAME = "Permission";
 
-    @GetMapping("/permission/tree")
+        @GetMapping("/permission/tree")
     public ResponseEntity tree() {
         return new ResponseEntity(permissionService.getPermissionTree(permissionService.findByPid(0)), HttpStatus.OK);
     }

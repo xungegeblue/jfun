@@ -30,11 +30,11 @@ import java.time.Duration;
  * @author jie
  * @date 2018-11-24
  */
-//@Slf4j
-//@Configuration
-//@EnableCaching
-//@ConditionalOnClass(RedisOperations.class)
-//@EnableConfigurationProperties(RedisProperties.class)
+@Slf4j
+@Configuration
+@EnableCaching
+@ConditionalOnClass(RedisOperations.class)
+@EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
@@ -94,9 +94,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setValueSerializer(fastJsonRedisSerializer);
         template.setHashValueSerializer(fastJsonRedisSerializer);
         // 全局开启AutoType，不建议使用
-        // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+         ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
         // 建议使用这种方式，小范围指定白名单
-        ParserConfig.getGlobalInstance().addAccept("cn.xiejx.jfun.service");
+        //ParserConfig.getGlobalInstance().addAccept("cn.xiejx.jfun.service");
         // key的序列化采用StringRedisSerializer
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());

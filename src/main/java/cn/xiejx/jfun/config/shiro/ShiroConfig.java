@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -44,15 +45,9 @@ import java.util.Properties;
 @Configuration
 
 public class ShiroConfig {
-    //取redis连接配置
-   @Value("${spring.redis.host}")
-    private String host ;//= "localhost";
-    @Value("${spring.redis.port}")
-    private int port =  6379;
-   @Value("${spring.redis.password}")
-    private String password;
-    @Value("${spring.redis.isRedisCache}")
-    private int isRedisCache = 1;
+
+    @Value("${spring.redis.host}")
+    private String host;
 
     private static final String CACHE_KEY = "jfun:session:";
 
@@ -71,6 +66,8 @@ public class ShiroConfig {
         daap.setProxyTargetClass(true);
         return daap;
     }
+    @Autowired
+    JedisPool jedisPool;
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -119,25 +116,17 @@ public class ShiroConfig {
     }
 
 
-    @Bean
-    public JedisPool jedisPool(){
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, 3000);
-        return jedisPool;
-    }
-
 
 
     @Bean
     public RedisManager redisManager(JedisPool jedisPool) {
         RedisManager redisManager = new RedisManager();
         redisManager.setJedisPool(jedisPool);
-        logger.info("配置redis连接设置##########" + host + ":::" + port);
         return redisManager;
     }
 
     @Bean
-    public RedisCacheManager cacheManager(RedisManager redisManager){
+    public RedisCacheManager redisCacheManager(RedisManager redisManager){
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager);
         return redisCacheManager;
@@ -146,7 +135,7 @@ public class ShiroConfig {
     @Bean
     SessionDAO sessionDAO(RedisManager redisManager) {
 
-        if (1 == isRedisCache) {
+        if (!StringUtils.isEmpty(host)) {
             logger.info("启用Redis缓存");
             RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
             redisSessionDAO.setKeyPrefix(CACHE_KEY);
@@ -164,7 +153,7 @@ public class ShiroConfig {
     public JfunSessionManager sessionManager(SessionDAO sessionDAO){
         JfunSessionManager jfunSessionManager = new JfunSessionManager();
 
-        if (1 == isRedisCache) {
+         if (!StringUtils.isEmpty(host)) {
             jfunSessionManager.setSessionDAO(sessionDAO);
         } else {
             jfunSessionManager.setSessionDAO(new MemorySessionDAO());
@@ -172,19 +161,13 @@ public class ShiroConfig {
 
         return jfunSessionManager;
     }
-    @Bean
-    public EhCacheManager ehCacheManager() {
-        EhCacheManager em = new EhCacheManager();
-        em.setCacheManagerConfigFile("classpath:config/ehcache.xml");
-        return em;
-    }
+
 
     @Bean
-    public SecurityManager securityManager(ShiroRealm shiroRealm,SessionDAO sessionDAO,EhCacheManager ehCacheManager,JfunSessionManager sessionManager) {
+    public SecurityManager securityManager(ShiroRealm shiroRealm,SessionDAO sessionDAO,JfunSessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm);
         securityManager.setSessionManager(sessionManager);
-        securityManager.setCacheManager(ehCacheManager);
         return securityManager;
     }
 
