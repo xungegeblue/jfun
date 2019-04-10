@@ -98,6 +98,6 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
                     wapper.eq(Log::getLogType, log.getLogType());
                     return wapper;
                 }
-        ));
+        ).orderByDesc(Log::getCreateTime));
     }
 }
