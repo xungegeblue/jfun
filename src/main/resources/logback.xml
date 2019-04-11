@@ -10,7 +10,7 @@
         </encoder>
 
         <!--添加我们自定义的filter-->
-        <!--<filter class="me.zhengjie.monitor.config.LogFilter"></filter>-->
+        <filter class="cn.xiejx.jfun.config.websocket.LogFilter"></filter>
     </appender>
 
     <!--普通日志输出到控制台-->
