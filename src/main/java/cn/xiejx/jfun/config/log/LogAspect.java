@@ -39,7 +39,9 @@ public class LogAspect {
         try {
             result = joinPoint.proceed();
         } catch (Throwable e) {
-            throw new BadRequestException(e.getMessage());
+            BadRequestException x = new BadRequestException(e.getMessage());
+            x.setStackTrace(e.getStackTrace());
+            throw x;
         }
         Log log = new Log("INFO",System.currentTimeMillis() - currentTime);
         log.setCreateTime(DateUtil.date().toTimestamp());
