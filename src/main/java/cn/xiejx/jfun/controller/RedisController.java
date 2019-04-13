@@ -46,15 +46,15 @@ public class RedisController {
     }
 
     @Log("删除Redis缓存")
-    @DeleteMapping(value = "/redis/all")
+    @DeleteMapping(value = "/redis")
     @RequiresPermissions(value = {"REDIS_DEL", "REDIS_ALL"}, logical = Logical.OR)
     public ResponseEntity delete(@RequestBody RedisVo resources) {
         redisService.delete(resources.getKey());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("删除Redis缓存")
-    @DeleteMapping(value = "redis")
+    @Log("删除全部Redis缓存")
+    @DeleteMapping(value = "redis/all")
     @RequiresPermissions(value = {"REDIS_DEL", "REDIS_ALL"}, logical = Logical.OR)
     public ResponseEntity deleteAll() {
         redisService.flushdb();
