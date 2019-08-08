@@ -21,3 +21,15 @@
 正在开发：
     1.用户模块（2019年3月11日）
 
+
+## 注意事项⚠️
+
+️
+如果从GitHub下载代码直接在idea运行，会出现这个问题
+
+```
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'shiroConfig': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'spring.redis.host' in value "${spring.redis.host}"
+
+```
+这个错误需要设置一下idea的配置文件，操作方法如下（把Resource目录设置为资源目录）
+选择jfun目录->Mark Directory as->Resource Root
