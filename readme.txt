@@ -32,4 +32,4 @@ org.springframework.beans.factory.BeanCreationException: Error creating bean wit
 
 ```
 这个错误需要设置一下idea的配置文件，操作方法如下（把Resource目录设置为资源目录）
-选择jfun目录->Mark Directory as->Resource Root
+选择jfun/src/main/resources->Mark Directory as->Resource Root
